@@ -1,4 +1,6 @@
+﻿using Authorize_chanse.ChatHub;
 using Authorize_chanse.DatabaseContext;
+using Authorize_chanse.Hubs;
 using Authorize_chanse.Interfaces;
 using Authorize_chanse.Services;
 using Authorize_chanse.UniversalMethods;
@@ -7,33 +9,27 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddOpenApi();
 
-
 // import DatabaseContext file
-builder.Services.AddDbContext<Contextdatabase>(options => 
-    options.UseNpgsql(builder.Configuration.GetConnectionString("TestDBString")), ServiceLifetime.Scoped);
-
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowBlazorWasm", policy =>
-    {
-        policy.WithOrigins("https://localhost:7073",
-            "http://localhost:7073").AllowAnyHeader().AllowAnyMethod();
-    });
-});
-
+builder.Services.AddDbContext<Contextdatabase>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("TestDbString")), ServiceLifetime.Scoped);
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddSingleton<JWTtokenGenerator>();
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowBlazorWasm", policy =>
+    {
+        policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+    });
+});
 
 var app = builder.Build();
-
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -42,13 +38,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors("AllowBlazorWasm");
-
 app.UseHttpsRedirection();
+
+app.UseCors("AllowBlazorWasm");
 
 app.MapGet("/", () => Results.Redirect("/swagger"));
 
 app.UseAuthorization();
+
+app.MapHub<ChatHub>("/chat");
 
 app.MapControllers();
 

@@ -5,10 +5,7 @@ namespace Authorize_chanse.DatabaseContext;
 
 public class Contextdatabase : DbContext
 {
-    public Contextdatabase(DbContextOptions<Contextdatabase> options) : base(options)
-    {
-        
-    }
+    public Contextdatabase(DbContextOptions<Contextdatabase> options) : base(options) { }
     
     public DbSet<Roles> Roles { get; set; }
     public DbSet<Logins> Logins { get; set; }

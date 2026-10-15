@@ -18,6 +18,7 @@ public class AuthService : IAuthService
         _context = context;
         _jwtTokenGenerator = jwtTokenGenerator;
     }
+
     public async Task<IActionResult> RegisterNewUser(QueryUsers register)
     {
         if (await _context.Logins.AnyAsync(x => x.email == register.Email))
@@ -28,6 +29,7 @@ public class AuthService : IAuthService
                 message = "Пользователь с таким Email уже существует"
             });
         }
+
         var newLogin = new Logins()
         {
             email = register.Email,
@@ -36,12 +38,11 @@ public class AuthService : IAuthService
             {
                 fullname = register.fullname,
                 college = register.college,
-                roleId = 2,
+                roleId = 1,
                 email = register.Email,
             }
-           
-
         };
+
         await _context.AddAsync(newLogin);
         await _context.SaveChangesAsync();
 
@@ -67,17 +68,24 @@ public class AuthService : IAuthService
                 token = token,
                 userId = selectedUser.userId,
             });
-            await _context.SaveChangesAsync();
-            
 
-            return new OkObjectResult(new { status = true, token = token, userId = selectedUser.User.userId, roleId = selectedUser.User.roleId });
+            await _context.SaveChangesAsync();
+
+            return new OkObjectResult(new
+            {
+                status = true,
+                token = token,
+                userId = selectedUser.User.userId,
+                roleId = selectedUser.User.roleId
+            });
         }
         else
         {
             return new NotFoundObjectResult(new
-                { status = false, message = "User not found. Check you login and password!" });
+            {
+                status = false,
+                message = "User not found. Check you login and password!"
+            });
         }
-        
-        
     }
 }

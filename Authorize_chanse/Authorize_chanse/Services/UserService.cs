@@ -18,6 +18,7 @@ public class UserService : IUserService
         _context = contextDatabase;
         _jwtTokensGenerator = jwtTokensGenerator;
     }
+
     public async Task<IActionResult> CheckProfile(string authorization)
     {
         var tempSession = authorization.Split(' ').Last();
@@ -65,10 +66,10 @@ public class UserService : IUserService
 
     public async Task<IActionResult> GetMood()
     {
-        var mood = await _context.MoodTrack.
+        var moods = await _context.MoodTrack.
             Include(u => u.User).ToListAsync();
 
-        if (mood == null)
+        if (moods == null)
         {
             return new NotFoundObjectResult(new
             {
@@ -77,13 +78,10 @@ public class UserService : IUserService
         }
 
         return new OkObjectResult(new
-            {
-                status = true,
-                data = new
-                {
-                   mood = mood
-                }
-            });
+        {
+            status = true,
+            data = new { moods = moods }
+        });
     }
 
     public async Task<IActionResult> CreateMood(string authorization, MoodQuery addMoodQuery)
@@ -93,6 +91,15 @@ public class UserService : IUserService
         var session = await _context.Sessions
             .Include(s => s.User)
             .FirstOrDefaultAsync(s => s.token == tempSession);   
+
+        if (session == null)
+        {
+            return new NotFoundObjectResult(new
+            {
+                status = false,
+                message = "Session not found"
+            });
+        }
         
         var newMood = new MoodTrack()
         {
@@ -127,10 +134,7 @@ public class UserService : IUserService
         return new OkObjectResult(new
         {
             status = true,
-            data = new
-            {
-                doctors = doctors
-            }
+            data = new { doctors = doctors }
         });
     }
 }

@@ -14,7 +14,6 @@ public class UserController
     
     [HttpGet]
     public async Task<IActionResult> CheckProfile([FromHeader] string authorization) => await _userService.CheckProfile(authorization);
-   
     
     [HttpGet("GetMood")]
     public async Task<IActionResult> GetMood() => await _userService.GetMood();
