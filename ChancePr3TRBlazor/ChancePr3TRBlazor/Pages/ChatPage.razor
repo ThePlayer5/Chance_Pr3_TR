@@ -1,0 +1,587 @@
+﻿@page "/chat"
+@using ChancePr3TRBlazor.ApiRequest.Services
+@inject UserService UserService
+
+<PageTitle>Chat</PageTitle>
+
+<body>
+    <nav aria-label="Основная навигация" class="chat-style-001">
+        <div class="static-header chat-style-002">
+            <NavLink href="/" class="" @onmouseenter="() => _isHover = true" @onmouseleave="() => _isHover = false">
+                <div class="chat-style-003">
+                    <img src="@(_isHover ? "chance-gif.gif" : "/chance.png")" class="chat-style-004" alt="Chance logo"/>
+                    <span class="chat-style-006">Шанс</span>
+                </div>
+            </NavLink>
+            <div class="hidden-mobile chat-style-007">
+                <NavLink href="/" class="static-page-link chat-style-008">Главная</NavLink>
+                <NavLink href="/tracker" class="static-page-link chat-style-008">Настроение</NavLink>
+                <NavLink href="/chat" class="static-page-link chat-style-009" aria-current="page" Match="NavLinkMatch.All">Чат</NavLink>
+                <NavLink href="/specials" class="static-page-link chat-style-008">Специалисты</NavLink>
+                <NavLink href="/profile" class="static-page-link chat-style-008">Профиль</NavLink>
+                <NavLink href="/about" class="static-page-link chat-style-008">О сервисе</NavLink>
+            </div>
+            <div class="chat-style-010">
+                <NavLink href="/crisis" class="static-page-link chat-style-011">🆘 Срочная помощь</NavLink>
+                <details class="mobile-menu">
+                    <summary aria-label="Меню">
+                        <div class="chat-style-012"></div>
+                        <div class="chat-style-012"></div>
+                        <div class="chat-style-013"></div>
+                    </summary>
+                    <div class="mobile-menu-links">
+                        <NavLink href="/">Главная</NavLink>
+                        <NavLink href="/tracker">Трекер настроения</NavLink>
+                        <NavLink href="/chat" aria-current="page" Match="NavLinkMatch.All">Анонимный чат</NavLink>
+                        <NavLink href="/specials">База специалистов</NavLink>
+                        <NavLink href="/profile">Мой профиль</NavLink>
+                        <NavLink href="/crisis">Кризисная помощь</NavLink>
+                        <NavLink href="/about">О сервисе</NavLink>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </nav>
+    <main>
+        <div class="chat-style-014">
+            <div class="chat-style-015">
+                <div class="chat-style-010">
+                    <div class="chat-style-016">💬</div>
+                    <div>
+                        <div class="chat-style-017">Анонимный чат поддержки</div>
+                        <div class="chat-style-018">
+                            <div class="chat-style-019"></div>
+                            <span class="chat-style-020">Онлайн</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="chat-style-021">
+                    <button type="button" class="chat-style-022">Завершить</button>
+                </div>
+            </div>
+            <div class="chat-style-023">
+                <div class="chat-style-024">
+                    <div class="chat-style-025">
+                        <p class="chat-style-026">Привет! Я здесь, чтобы выслушать вас. Можете писать анонимно — имя указывать не нужно. Что вас беспокоит?</p>
+                        <p class="chat-style-027">13:43</p>
+                    </div>
+                </div>
+                <div></div>
+            </div>
+            <div class="chat-style-028">
+                <textarea placeholder="Напишите сообщение... (Enter для отправки)" rows="2" aria-label="Напишите сообщение... (Enter для отправки)" class="chat-style-029"></textarea>
+                <button type="button" class="chat-style-030">➤</button>
+            </div>
+            <p class="chat-style-031">Имя указывать не нужно. Всё анонимно и конфиденциально.</p>
+        </div>
+    </main>
+</body>
+
+<style>
+    import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap');
+
+
+    :root {
+        --font-display: 'Nunito', sans-serif;
+        --font-body: 'Inter', sans-serif;
+        --color-blue-50: #eff6ff;
+        --color-blue-100: #dbeafe;
+        --color-blue-200: #bfdbfe;
+        --color-blue-400: #60a5fa;
+        --color-blue-500: #3b82f6;
+        --color-blue-600: #2563eb;
+        --color-blue-700: #1d4ed8;
+        --color-blue-800: #1e40af;
+        --color-crisis: #dc2626;
+        --color-crisis-hover: #b91c1c;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: #f8faff;
+        color: #1e293b;
+        margin: 0;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Nunito', sans-serif;
+    }
+
+    ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #bfdbfe;
+        border-radius: 999px;
+    }
+    /* Browser defaults corresponding to the original Tailwind reset. */
+    html {
+        line-height: 1.5;
+        -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+        min-width: 320px;
+    }
+
+    h1, h2, h3, h4, h5, h6, p {
+        margin: 0;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        font-size: inherit;
+        font-weight: inherit;
+    }
+
+    a {
+        color: inherit;
+        text-decoration: inherit;
+    }
+
+    button, input, select, textarea {
+        font: inherit;
+        color: inherit;
+    }
+
+    button {
+        appearance: button;
+    }
+
+        button:disabled {
+            cursor: not-allowed;
+        }
+
+    img, svg {
+        display: block;
+        max-width: 100%;
+    }
+
+    textarea {
+        resize: vertical;
+    }
+
+    :focus-visible {
+        outline: 3px solid #2563eb;
+        outline-offset: 3px;
+    }
+
+    .static-page-link {
+        text-decoration: none;
+    }
+
+    a.static-page-link {
+        display: inline-block;
+    }
+
+    a.static-feature-link {
+        display: block;
+    }
+
+    .static-page-link:hover {
+        filter: brightness(0.97);
+        transition: 0.1s;
+    }
+
+    .mobile-menu {
+        display: none;
+    }
+
+        .mobile-menu summary {
+            cursor: pointer;
+            list-style: none;
+        }
+
+            .mobile-menu summary::-webkit-details-marker {
+                display: none;
+            }
+
+    .mobile-menu-links {
+        position: absolute;
+        top: 64px;
+        right: 12px;
+        left: 12px;
+        padding: 12px;
+        background: #fff;
+        border: 1px solid #dbeafe;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(37,99,235,0.12);
+    }
+
+        .mobile-menu-links a {
+            display: block;
+            padding: 10px 12px;
+            color: #475569;
+            border-radius: 8px;
+        }
+
+            .mobile-menu-links a[aria-current="page"] {
+                background: #eff6ff;
+                color: #2563eb;
+                font-weight: 600;
+            }
+    media (max-width: 768px) {
+        .hidden-mobile
+
+    {
+        display: none !important;
+    }
+
+    .mobile-menu {
+        display: block;
+    }
+
+    .static-header {
+        padding-right: 14px;
+        padding-left: 14px;
+        gap: 10px;
+    }
+
+    }
+    media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after
+
+    {
+        transition: none !important;
+        animation: none !important;
+    }
+
+    }
+
+
+    media (max-width: 768px) {
+        .hidden-mobile
+
+    {
+        display: none !important;
+    }
+
+    .show-mobile {
+        display: block !important;
+    }
+
+    }
+    media (min-width: 769px) {
+        .show-mobile
+
+    {
+        display: none !important;
+    }
+
+    }
+
+
+    keyframes bounce {
+        0%, 80%, 100%
+
+    {
+        transform: scale(0.7);
+        opacity: 0.5;
+    }
+
+    40% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    }
+
+
+    /* Extracted original page and navigation styles. */
+    .chat-style-001 {
+        background: #fff;
+        border-bottom: 1px solid #dbeafe;
+        position: sticky;
+        top: 0;
+        z-index: 50;
+    }
+
+    .chat-style-002 {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 64px;
+    }
+
+    .chat-style-003 {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+    }
+
+    .chat-style-004 {
+        width: 36px;
+        height: 36px;
+    }
+
+    .chat-style-005 {
+        color: #fff;
+        font-family: Nunito, sans-serif;
+        font-weight: 800;
+        font-size: 18px;
+    }
+
+    .chat-style-006 {
+        font-family: Nunito, sans-serif;
+        font-weight: 800;
+        font-size: 20px;
+        color: #1e40af;
+    }
+
+    .chat-style-007 {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .chat-style-008 {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 7px 14px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 400;
+        color: #475569;
+        transition: all 0.15s;
+    }
+
+    .chat-style-009 {
+        background: #eff6ff;
+        border: none;
+        cursor: pointer;
+        padding: 7px 14px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        color: #2563eb;
+        transition: all 0.15s;
+    }
+
+    .chat-style-010 {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .chat-style-011 {
+        background: #dc2626;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 700;
+        font-family: Nunito, sans-serif;
+        transition: background 0.15s;
+        white-space: nowrap;
+    }
+
+    .chat-style-012 {
+        width: 22px;
+        height: 2px;
+        background: #475569;
+        margin-bottom: 5px;
+        border-radius: 2px;
+    }
+
+    .chat-style-013 {
+        width: 22px;
+        height: 2px;
+        background: #475569;
+        border-radius: 2px;
+    }
+
+    .chat-style-014 {
+        max-width: 700px;
+        margin: 0 auto;
+        padding: 40px 24px 24px;
+        display: flex;
+        flex-direction: column;
+        height: calc(100vh - 64px);
+    }
+
+    .chat-style-015 {
+        background: #fff;
+        border: 1px solid #dbeafe;
+        border-radius: 16px 16px 0 0;
+        padding: 16px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .chat-style-016 {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+    }
+
+    .chat-style-017 {
+        font-family: Nunito, sans-serif;
+        font-weight: 700;
+        font-size: 16px;
+        color: #1e293b;
+    }
+
+    .chat-style-018 {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .chat-style-019 {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #16a34a;
+    }
+
+    .chat-style-020 {
+        font-size: 12px;
+        color: #16a34a;
+    }
+
+    .chat-style-021 {
+        display: flex;
+        gap: 8px;
+    }
+
+    .chat-style-022 {
+        background: #fff1f2;
+        color: #dc2626;
+        border: 1px solid #fecaca;
+        border-radius: 8px;
+        padding: 6px 14px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .chat-style-022:hover {
+        color: #b91c1c;
+        filter: brightness(0.97);
+        transition: 0.1s;
+    }
+
+    .chat-style-023 {
+        flex: 1;
+        overflow-y: auto;
+        background: #f8faff;
+        border: 1px solid #dbeafe;
+        border-top: none;
+        padding: 20px 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .chat-style-024 {
+        display: flex;
+        justify-content: flex-start;
+    }
+
+    .chat-style-025 {
+        max-width: 72%;
+        background: #fff;
+        color: #1e293b;
+        border-radius: 16px 16px 16px 4px;
+        padding: 12px 16px;
+        font-size: 14px;
+        line-height: 1.55;
+        border: 1px solid #dbeafe;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+
+    .chat-style-026 {
+        margin: 0;
+    }
+
+    .chat-style-027 {
+        margin: 6px 0 0;
+        font-size: 11px;
+        color: #94a3b8;
+        text-align: right;
+    }
+
+    .chat-style-028 {
+        background: #fff;
+        border: 1px solid #dbeafe;
+        border-top: none;
+        border-radius: 0 0 16px 16px;
+        padding: 14px 16px;
+        display: flex;
+        gap: 10px;
+        align-items: flex-end;
+    }
+
+    .chat-style-029 {
+        flex: 1;
+        border: 1.5px solid #dbeafe;
+        border-radius: 10px;
+        padding: 10px 14px;
+        font-size: 14px;
+        font-family: Inter, sans-serif;
+        color: #1e293b;
+        resize: none;
+        outline: none;
+        background: #f8faff;
+    }
+
+    .chat-style-030 {
+        background: #cbd5e1;
+        color: #2563eb;
+        border: none;
+        cursor: pointer;
+        width: 44px;
+        height: 44px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        transition: background 0.15s;
+        flex-shrink: 0;
+    }
+
+    .chat-style-030:hover {
+        background: #ffffff;
+        color: #1d4ed8;
+        filter: brightness(0.97);
+        transition: 0.1s;
+    }
+
+    .chat-style-031 {
+        text-align: center;
+        font-size: 12px;
+        color: #94a3b8;
+        margin-top: 10px;
+    }
+
+</style>
+
+@code {
+    private bool _isHover;
+}

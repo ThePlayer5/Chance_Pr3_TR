@@ -1,0 +1,653 @@
+﻿@page "/about"
+@using ChancePr3TRBlazor.ApiRequest.Services
+@inject UserService UserService
+
+<PageTitle>About</PageTitle>
+
+<body>
+    <nav aria-label="Основная навигация" class="about-style-001">
+        <div class="static-header about-style-002">
+            <NavLink href="/" class="" @onmouseenter="() => _isHover = true" @onmouseleave="() => _isHover = false">
+                <div class="about-style-003">
+                    <img src="@(_isHover ? "chance-gif.gif" : "/chance.png")" class="about-style-004" alt="Chance logo"/>
+                    <span class="about-style-006">Шанс</span>
+                </div>
+            </NavLink>
+            <div class="hidden-mobile about-style-007">
+                <NavLink href="/" class="static-page-link about-style-008">Главная</NavLink>
+                <NavLink href="/tracker" class="static-page-link about-style-008">Настроение</NavLink>
+                <NavLink href="/chat" class="static-page-link about-style-008">Чат</NavLink>
+                <NavLink href="/specials" class="static-page-link about-style-008">Специалисты</NavLink>
+                <NavLink href="/profile" class="static-page-link about-style-008">Профиль</NavLink>
+                <NavLink href="/about" class="static-page-link about-style-009" aria-current="page" Match="NavLinkMatch.All">О сервисе</NavLink>
+            </div>
+            <div class="about-style-010">
+                <NavLink href="/crisis" class="static-page-link about-style-011">🆘 Срочная помощь</NavLink>
+                <details class="mobile-menu">
+                    <summary aria-label="Меню">
+                        <div class="about-style-012"></div>
+                        <div class="about-style-012"></div>
+                        <div class="about-style-013"></div>
+                    </summary>
+                    <div class="mobile-menu-links">
+                        <NavLink href="/">Главная</NavLink>
+                        <NavLink href="/tracker">Трекер настроения</NavLink>
+                        <NavLink href="/chat">Анонимный чат</NavLink>
+                        <NavLink href="/specials">База специалистов</NavLink>
+                        <NavLink href="/profile">Мой профиль</NavLink>
+                        <NavLink href="/crisis">Кризисная помощь</NavLink>
+                        <NavLink href="/about" aria-current="page" Match="NavLinkMatch.All">О сервисе</NavLink>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </nav>
+    <main>
+        <div class="about-style-014">
+            <div class="about-style-015">
+                <img src="/chance-gif.gif" class="about-style-016" alt="Chance logo" />
+                <h1 class="about-style-018">О сервисе «Шанс»</h1>
+                <p class="about-style-019">Платформа психологической поддержки, созданная специально для студентов. Безопасно, бесплатно и без осуждения.</p>
+            </div>
+            <div class="about-style-020">
+                <h2 class="about-style-021">Наша миссия</h2>
+                <p class="about-style-022">Сделать психологическую поддержку доступной для каждого студента. Мы верим, что своевременная помощь меняет жизни — и хотим, чтобы любой человек мог её получить в любой момент, не стесняясь и не откладывая.</p>
+            </div>
+            <div class="about-style-023">
+                <h2 class="about-style-024">Проблема, которую мы решаем</h2>
+                <div class="about-style-025">
+                    <div class="about-style-026">
+                        <span class="about-style-027">✕</span>
+                        <span class="about-style-028">Студенты часто не знают, куда обратиться за помощью</span>
+                    </div>
+                    <div class="about-style-026">
+                        <span class="about-style-027">✕</span>
+                        <span class="about-style-028">Стигма вокруг психологических проблем мешает просить о поддержке</span>
+                    </div>
+                    <div class="about-style-026">
+                        <span class="about-style-027">✕</span>
+                        <span class="about-style-028">Доступных и понятных ресурсов для молодёжи крайне мало</span>
+                    </div>
+                    <div class="about-style-026">
+                        <span class="about-style-027">✕</span>
+                        <span class="about-style-028">Кризисные ситуации требуют немедленного реагирования</span>
+                    </div>
+                </div>
+            </div>
+            <h2 class="about-style-024">Основные возможности</h2>
+            <div class="about-style-029">
+                <div class="about-style-030">
+                    <div class="about-style-031">📊</div>
+                    <h3 class="about-style-032">Трекер настроения</h3>
+                    <p class="about-style-033">Ежедневные отметки помогают отследить динамику и понять, что влияет на ваше состояние.</p>
+                </div>
+                <div class="about-style-030">
+                    <div class="about-style-031">💬</div>
+                    <h3 class="about-style-032">Анонимный чат</h3>
+                    <p class="about-style-033">Поговорите со специалистом поддержки без регистрации и раскрытия личных данных.</p>
+                </div>
+                <div class="about-style-030">
+                    <div class="about-style-031">👥</div>
+                    <h3 class="about-style-032">База специалистов</h3>
+                    <p class="about-style-033">Актуальный список психологов и кризисных центров с контактами и описанием.</p>
+                </div>
+                <div class="about-style-030">
+                    <div class="about-style-031">🆘</div>
+                    <h3 class="about-style-032">Кризисная помощь</h3>
+                    <p class="about-style-033">Горячие линии и пошаговые действия всегда под рукой — для экстренных ситуаций.</p>
+                </div>
+            </div>
+            <div class="about-style-034">
+                <h2 class="about-style-035">Наши принципы</h2>
+                <div class="about-style-036">
+                    <div class="about-style-037">
+                        <span class="about-style-038">✓</span>
+                        Конфиденциальность — ваши данные под защитой
+                    </div>
+                    <div class="about-style-037">
+                        <span class="about-style-038">✓</span>
+                        Анонимность — никто не знает, кто вы
+                    </div>
+                    <div class="about-style-037">
+                        <span class="about-style-038">✓</span>
+                        Доступность — бесплатно для всех студентов
+                    </div>
+                    <div class="about-style-037">
+                        <span class="about-style-038">✓</span>
+                        Без осуждения — каждый достоин помощи
+                    </div>
+                </div>
+            </div>
+            <div class="about-style-039">
+                <NavLink href="/" class="static-page-link about-style-040">На главную</NavLink>
+                <NavLink href="/crisis" class="static-page-link about-style-041">🆘 Кризисная помощь</NavLink>
+            </div>
+        </div>
+    </main>
+</body>
+
+<style>
+    import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap');
+
+
+    :root {
+        --font-display: 'Nunito', sans-serif;
+        --font-body: 'Inter', sans-serif;
+        --color-blue-50: #eff6ff;
+        --color-blue-100: #dbeafe;
+        --color-blue-200: #bfdbfe;
+        --color-blue-400: #60a5fa;
+        --color-blue-500: #3b82f6;
+        --color-blue-600: #2563eb;
+        --color-blue-700: #1d4ed8;
+        --color-blue-800: #1e40af;
+        --color-crisis: #dc2626;
+        --color-crisis-hover: #b91c1c;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: #f8faff;
+        color: #1e293b;
+        margin: 0;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Nunito', sans-serif;
+    }
+
+    ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #bfdbfe;
+        border-radius: 999px;
+    }
+    /* Browser defaults corresponding to the original Tailwind reset. */
+    html {
+        line-height: 1.5;
+        -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+        min-width: 320px;
+    }
+
+    h1, h2, h3, h4, h5, h6, p {
+        margin: 0;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        font-size: inherit;
+        font-weight: inherit;
+    }
+
+    a {
+        color: inherit;
+        text-decoration: inherit;
+    }
+
+    button, input, select, textarea {
+        font: inherit;
+        color: inherit;
+    }
+
+    button {
+        appearance: button;
+    }
+
+        button:disabled {
+            cursor: not-allowed;
+        }
+
+    img, svg {
+        display: block;
+        max-width: 100%;
+    }
+
+    textarea {
+        resize: vertical;
+    }
+
+    :focus-visible {
+        outline: 3px solid #2563eb;
+        outline-offset: 3px;
+    }
+
+    .static-page-link {
+        text-decoration: none;
+    }
+
+    a.static-page-link {
+        display: inline-block;
+    }
+
+    a.static-feature-link {
+        display: block;
+    }
+
+    .static-page-link:hover {
+        filter: brightness(0.97);
+        transition: 0.1s;
+    }
+
+    .mobile-menu {
+        display: none;
+    }
+
+        .mobile-menu summary {
+            cursor: pointer;
+            list-style: none;
+        }
+
+            .mobile-menu summary::-webkit-details-marker {
+                display: none;
+            }
+
+    .mobile-menu-links {
+        position: absolute;
+        top: 64px;
+        right: 12px;
+        left: 12px;
+        padding: 12px;
+        background: #fff;
+        border: 1px solid #dbeafe;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(37,99,235,0.12);
+    }
+
+        .mobile-menu-links a {
+            display: block;
+            padding: 10px 12px;
+            color: #475569;
+            border-radius: 8px;
+        }
+
+            .mobile-menu-links a[aria-current="page"] {
+                background: #eff6ff;
+                color: #2563eb;
+                font-weight: 600;
+            }
+    media (max-width: 768px) {
+        .hidden-mobile
+
+    {
+        display: none !important;
+    }
+
+    .mobile-menu {
+        display: block;
+    }
+
+    .static-header {
+        padding-right: 14px;
+        padding-left: 14px;
+        gap: 10px;
+    }
+
+    }
+    media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after
+
+    {
+        transition: none !important;
+        animation: none !important;
+    }
+
+    }
+
+
+    media (max-width: 768px) {
+        .hidden-mobile
+
+    {
+        display: none !important;
+    }
+
+    .show-mobile {
+        display: block !important;
+    }
+
+    }
+    media (min-width: 769px) {
+        .show-mobile
+
+    {
+        display: none !important;
+    }
+
+    }
+
+
+    /* Extracted original page and navigation styles. */
+    .about-style-001 {
+        background: #fff;
+        border-bottom: 1px solid #dbeafe;
+        position: sticky;
+        top: 0;
+        z-index: 50;
+    }
+
+    .about-style-002 {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 64px;
+    }
+
+    .about-style-003 {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+    }
+
+    .about-style-004 {
+        width: 36px;
+        height: 36px;
+    }
+
+    .about-style-005 {
+        color: #fff;
+        font-family: Nunito, sans-serif;
+        font-weight: 800;
+        font-size: 18px;
+    }
+
+    .about-style-006 {
+        font-family: Nunito, sans-serif;
+        font-weight: 800;
+        font-size: 20px;
+        color: #1e40af;
+    }
+
+    .about-style-007 {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .about-style-008 {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 7px 14px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 400;
+        color: #475569;
+        transition: all 0.15s;
+    }
+
+    .about-style-009 {
+        background: #eff6ff;
+        border: none;
+        cursor: pointer;
+        padding: 7px 14px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        color: #2563eb;
+        transition: all 0.15s;
+    }
+
+    .about-style-010 {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .about-style-011 {
+        background: #dc2626;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 700;
+        font-family: Nunito, sans-serif;
+        transition: background 0.15s;
+        white-space: nowrap;
+    }
+
+    .about-style-012 {
+        width: 22px;
+        height: 2px;
+        background: #475569;
+        margin-bottom: 5px;
+        border-radius: 2px;
+    }
+
+    .about-style-013 {
+        width: 22px;
+        height: 2px;
+        background: #475569;
+        border-radius: 2px;
+    }
+
+    .about-style-014 {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 48px 24px;
+    }
+
+    .about-style-015 {
+        text-align: center;
+        margin-bottom: 56px;
+    }
+
+    .about-style-016 {
+        width: 92px;
+        height: 92px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .about-style-017 {
+        color: #fff;
+        font-family: Nunito, sans-serif;
+        font-weight: 800;
+        font-size: 36px;
+    }
+
+    .about-style-018 {
+        font-family: Nunito, sans-serif;
+        font-weight: 800;
+        font-size: 36px;
+        color: #1e40af;
+        margin: 0 0 14px;
+    }
+
+    .about-style-019 {
+        color: #64748b;
+        font-size: 17px;
+        line-height: 1.7;
+        max-width: 560px;
+        margin: 0 auto;
+    }
+
+    .about-style-020 {
+        background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+        border-radius: 20px;
+        padding: 32px;
+        margin-bottom: 40px;
+        color: #fff;
+    }
+
+    .about-style-021 {
+        font-family: Nunito, sans-serif;
+        font-weight: 800;
+        font-size: 22px;
+        margin: 0 0 12px;
+    }
+
+    .about-style-022 {
+        font-size: 15px;
+        line-height: 1.75;
+        margin: 0;
+        opacity: 0.92;
+    }
+
+    .about-style-023 {
+        margin-bottom: 48px;
+    }
+
+    .about-style-024 {
+        font-family: Nunito, sans-serif;
+        font-weight: 800;
+        font-size: 24px;
+        color: #1e293b;
+        margin: 0 0 20px;
+    }
+
+    .about-style-025 {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .about-style-026 {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        background: #fff;
+        border: 1px solid #dbeafe;
+        border-radius: 12px;
+        padding: 14px 18px;
+    }
+
+    .about-style-027 {
+        color: #dc2626;
+        font-size: 18px;
+        flex-shrink: 0;
+        margin-top: 1px;
+    }
+
+    .about-style-028 {
+        color: #475569;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    .about-style-029 {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 16px;
+        margin-bottom: 48px;
+    }
+
+    .about-style-030 {
+        background: #fff;
+        border: 1px solid #dbeafe;
+        border-radius: 16px;
+        padding: 22px;
+    }
+
+    .about-style-031 {
+        font-size: 28px;
+        margin-bottom: 12px;
+    }
+
+    .about-style-032 {
+        font-family: Nunito, sans-serif;
+        font-weight: 700;
+        font-size: 15px;
+        color: #1e293b;
+        margin: 0 0 8px;
+    }
+
+    .about-style-033 {
+        color: #64748b;
+        font-size: 13px;
+        line-height: 1.6;
+        margin: 0;
+    }
+
+    .about-style-034 {
+        background: #eff6ff;
+        border: 1px solid #bfdbfe;
+        border-radius: 16px;
+        padding: 28px;
+        margin-bottom: 40px;
+    }
+
+    .about-style-035 {
+        font-family: Nunito, sans-serif;
+        font-weight: 800;
+        font-size: 20px;
+        color: #1e40af;
+        margin: 0 0 16px;
+    }
+
+    .about-style-036 {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .about-style-037 {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        font-size: 14px;
+        color: #1e40af;
+    }
+
+    .about-style-038 {
+        color: #2563eb;
+        font-weight: 700;
+    }
+
+    .about-style-039 {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .about-style-040 {
+        background: #2563eb;
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        padding: 12px 24px;
+        font-size: 15px;
+        font-weight: 600;
+        font-family: Nunito, sans-serif;
+        cursor: pointer;
+    }
+
+    .about-style-041 {
+        background: #fff1f2;
+        color: #dc2626;
+        border: 1.5px solid #fecaca;
+        border-radius: 10px;
+        padding: 12px 24px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+</style>
+
+@code {
+    private bool _isHover;
+}

@@ -1,0 +1,6 @@
+@Authorize_chanse_HostAddress = http://localhost:5001
+
+GET {{Authorize_chanse_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

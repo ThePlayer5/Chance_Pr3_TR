@@ -1,0 +1,763 @@
+﻿@page "/specials"
+@using ChancePr3TRBlazor.ApiRequest.Services
+@inject UserService UserService
+
+<PageTitle>Specialists</PageTitle>
+
+<body>
+    <nav aria-label="Основная навигация" class="specialists-style-001">
+        <div class="static-header specialists-style-002">
+            <NavLink href="/" class="" @onmouseenter="() => _isHover = true" @onmouseleave="() => _isHover = false">
+                <div class="specialists-style-003">
+                    <img src="@(_isHover ? "chance-gif.gif" : "/chance.png")" class="specialists-style-004" alt="Chance logo"/>
+                    <span class="specialists-style-006">Шанс</span>
+                </div>
+            </NavLink>
+            <div class="hidden-mobile specialists-style-007">
+                <NavLink href="/" class="static-page-link specialists-style-008">Главная</NavLink>
+                <NavLink href="/tracker" class="static-page-link specialists-style-008">Настроение</NavLink>
+                <NavLink href="/chat" class="static-page-link specialists-style-008">Чат</NavLink>
+                <NavLink href="/specials" class="static-page-link specialists-style-009" aria-current="page" Match="NavLinkMatch.All">Специалисты</NavLink>
+                <NavLink href="/profile" class="static-page-link specialists-style-008">Профиль</NavLink>
+                <NavLink href="/about" class="static-page-link specialists-style-008">О сервисе</NavLink>
+            </div>
+            <div class="specialists-style-010">
+                <NavLink href="/crisis" class="static-page-link specialists-style-011">🆘 Срочная помощь</NavLink>
+                <details class="mobile-menu">
+                    <summary aria-label="Меню">
+                        <div class="specialists-style-012"></div>
+                        <div class="specialists-style-012"></div>
+                        <div class="specialists-style-013"></div>
+                    </summary>
+                    <div class="mobile-menu-links">
+                        <NavLink href="/">Главная</NavLink>
+                        <NavLink href="/tracker">Трекер настроения</NavLink>
+                        <NavLink href="/chat">Анонимный чат</NavLink>
+                        <NavLink href="/specials" aria-current="page" Match="NavLinkMatch.All">База специалистов</NavLink>
+                        <NavLink href="/profile">Мой профиль</NavLink>
+                        <NavLink href="/crisis">Кризисная помощь</NavLink>
+                        <NavLink href="/about">О сервисе</NavLink>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </nav>
+    <main>
+        <div class="specialists-style-014">
+            <h1 class="specialists-style-015">База специалистов</h1>
+            <p class="specialists-style-016">Психологи, психотерапевты и организации, готовые помочь студентам.</p>
+            <div class="specialists-style-017">
+                <input placeholder="🔍  Поиск по имени, описанию или ключевым словам" value="" aria-label="🔍  Поиск по имени, описанию или ключевым словам" class="specialists-style-018">
+            </div>
+            <div class="specialists-style-019">
+                <button type="button" class="specialists-style-021">Все</button>
+                <button type="button" class="specialists-style-021">Тревога и стресс</button>
+                <button type="button" class="specialists-style-021">Депрессия</button>
+                <button type="button" class="specialists-style-021">Межличностные отношения</button>
+                <button type="button" class="specialists-style-021">Кризисная помощь</button>
+                <button type="button" class="specialists-style-021">Учёба и концентрация</button>
+            </div>
+            <div class="specialists-style-022">
+                <div class="specialists-style-023">
+                    <div class="specialists-style-024">
+                        <div class="specialists-style-025">👤</div>
+                        <div class="specialists-style-026">
+                            <div class="specialists-style-027">Анна Сергеевна Белова</div>
+                            <div class="specialists-style-028">Клинический психолог</div>
+                            <div class="specialists-style-029">Студенческий психологический центр МГУ</div>
+                        </div>
+                        <span class="specialists-style-030">● Онлайн</span>
+                    </div>
+                    <p class="specialists-style-031">Специализируется на работе со студентами: тревожность, экзаменационный стресс, адаптация к университ...</p>
+                    <button type="button" class="specialists-style-032">Подробнее</button>
+                    <div class="specialists-style-033">
+                        <span class="specialists-style-034">Тревога</span>
+                        <span class="specialists-style-034">Стресс</span>
+                        <span class="specialists-style-034">Адаптация</span>
+                    </div>
+                    <div class="specialists-style-035">
+                        <a href="tel:+7 (495) 939-10-82" class="specialists-style-036">
+                            📞
+                            <span class="specialists-style-037">+7 (495) 939-10-82</span>
+                        </a>
+                        <a href="mailto:belova@psyhelp.msu.ru" class="specialists-style-038">✉️ belova@psyhelp.msu.ru</a>
+                    </div>
+                </div>
+                <div class="specialists-style-023">
+                    <div class="specialists-style-024">
+                        <div class="specialists-style-025">👤</div>
+                        <div class="specialists-style-026">
+                            <div class="specialists-style-027">Дмитрий Александрович Козлов</div>
+                            <div class="specialists-style-028">Психотерапевт</div>
+                            <div class="specialists-style-029">Центр психологической помощи «Опора»</div>
+                        </div>
+                    </div>
+                    <p class="specialists-style-031">Работает с депрессивными расстройствами, апатией, проблемами самооценки. Когнитивно-поведенческая те...</p>
+                    <button type="button" class="specialists-style-032">Подробнее</button>
+                    <div class="specialists-style-033">
+                        <span class="specialists-style-034">Депрессия</span>
+                        <span class="specialists-style-034">КПТ</span>
+                        <span class="specialists-style-034">Самооценка</span>
+                    </div>
+                    <div class="specialists-style-035">
+                        <a href="tel:+7 (812) 331-09-45" class="specialists-style-036">
+                            📞
+                            <span class="specialists-style-037">+7 (812) 331-09-45</span>
+                        </a>
+                        <a href="mailto:kozlov@opora-help.ru" class="specialists-style-038">✉️ kozlov@opora-help.ru</a>
+                        <a href="https://opora-help.ru" target="_blank" rel="noreferrer" class="specialists-style-038">🌐 opora-help.ru</a>
+                    </div>
+                </div>
+                <div class="specialists-style-023">
+                    <div class="specialists-style-024">
+                        <div class="specialists-style-025">👤</div>
+                        <div class="specialists-style-026">
+                            <div class="specialists-style-027">Мария Игоревна Петрова</div>
+                            <div class="specialists-style-028">Психолог-консультант</div>
+                            <div class="specialists-style-029">Служба психологической помощи СПБГУ</div>
+                        </div>
+                        <span class="specialists-style-030">● Онлайн</span>
+                    </div>
+                    <p class="specialists-style-031">Помогает с конфликтами в отношениях, проблемами общения, одиночеством. Также ведёт групповые тренинг...</p>
+                    <button type="button" class="specialists-style-032">Подробнее</button>
+                    <div class="specialists-style-033">
+                        <span class="specialists-style-034">Отношения</span>
+                        <span class="specialists-style-034">Одиночество</span>
+                        <span class="specialists-style-034">Конфликты</span>
+                    </div>
+                    <div class="specialists-style-035">
+                        <a href="tel:+7 (812) 328-96-06" class="specialists-style-036">
+                            📞
+                            <span class="specialists-style-037">+7 (812) 328-96-06</span>
+                        </a>
+                        <a href="mailto:petrova@spbu.ru" class="specialists-style-038">✉️ petrova@spbu.ru</a>
+                    </div>
+                </div>
+                <div class="specialists-style-023">
+                    <div class="specialists-style-024">
+                        <div class="specialists-style-025">🆘</div>
+                        <div class="specialists-style-026">
+                            <div class="specialists-style-027">Телефон доверия для молодёжи</div>
+                            <div class="specialists-style-028">Служба экстренной психологической помощи</div>
+                            <div class="specialists-style-029">Министерство здравоохранения РФ</div>
+                        </div>
+                        <span class="specialists-style-030">● Онлайн</span>
+                    </div>
+                    <p class="specialists-style-031">Бесплатная и анонимная круглосуточная помощь по телефону. Специалисты выслушают и помогут справиться...</p>
+                    <button type="button" class="specialists-style-032">Подробнее</button>
+                    <div class="specialists-style-033">
+                        <span class="specialists-style-034">Кризис</span>
+                        <span class="specialists-style-034">Бесплатно</span>
+                        <span class="specialists-style-034">Анонимно</span>
+                        <span class="specialists-style-034">24/7</span>
+                    </div>
+                    <div class="specialists-style-035">
+                        <a href="tel:8-800-2000-122" class="specialists-style-036">
+                            📞
+                            <span class="specialists-style-037">8-800-2000-122</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="specialists-style-023">
+                    <div class="specialists-style-024">
+                        <div class="specialists-style-025">🧠</div>
+                        <div class="specialists-style-026">
+                            <div class="specialists-style-027">Ирина Владимировна Сомова</div>
+                            <div class="specialists-style-028">Нейропсихолог</div>
+                            <div class="specialists-style-029">Центр «Ресурс»</div>
+                        </div>
+                    </div>
+                    <p class="specialists-style-031">Помогает студентам с СДВГ, проблемами концентрации, прокрастинацией и организацией учебного процесса...</p>
+                    <button type="button" class="specialists-style-032">Подробнее</button>
+                    <div class="specialists-style-033">
+                        <span class="specialists-style-034">СДВГ</span>
+                        <span class="specialists-style-034">Концентрация</span>
+                        <span class="specialists-style-034">Прокрастинация</span>
+                    </div>
+                    <div class="specialists-style-035">
+                        <a href="tel:+7 (495) 777-33-11" class="specialists-style-036">
+                            📞
+                            <span class="specialists-style-037">+7 (495) 777-33-11</span>
+                        </a>
+                        <a href="mailto:somova@resurs-center.ru" class="specialists-style-038">✉️ somova@resurs-center.ru</a>
+                    </div>
+                </div>
+                <div class="specialists-style-023">
+                    <div class="specialists-style-024">
+                        <div class="specialists-style-025">🆘</div>
+                        <div class="specialists-style-026">
+                            <div class="specialists-style-027">Кризисный центр «Вместе»</div>
+                            <div class="specialists-style-028">Многопрофильный центр помощи</div>
+                            <div class="specialists-style-029">НКО «Вместе»</div>
+                        </div>
+                        <span class="specialists-style-030">● Онлайн</span>
+                    </div>
+                    <p class="specialists-style-031">Индивидуальные и групповые консультации, поддержка в кризисных ситуациях. Первый приём бесплатный дл...</p>
+                    <button type="button" class="specialists-style-032">Подробнее</button>
+                    <div class="specialists-style-033">
+                        <span class="specialists-style-034">Кризис</span>
+                        <span class="specialists-style-034">Группа</span>
+                        <span class="specialists-style-034">Первый приём бесплатно</span>
+                    </div>
+                    <div class="specialists-style-035">
+                        <a href="tel:+7 (495) 120-91-72" class="specialists-style-036">
+                            📞
+                            <span class="specialists-style-037">+7 (495) 120-91-72</span>
+                        </a>
+                        <a href="https://vmeste-help.org" target="_blank" rel="noreferrer" class="specialists-style-038">🌐 vmeste-help.org</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+
+<style>
+    import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap');
+
+
+    :root {
+        --font-display: 'Nunito', sans-serif;
+        --font-body: 'Inter', sans-serif;
+        --color-blue-50: #eff6ff;
+        --color-blue-100: #dbeafe;
+        --color-blue-200: #bfdbfe;
+        --color-blue-400: #60a5fa;
+        --color-blue-500: #3b82f6;
+        --color-blue-600: #2563eb;
+        --color-blue-700: #1d4ed8;
+        --color-blue-800: #1e40af;
+        --color-crisis: #dc2626;
+        --color-crisis-hover: #b91c1c;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: #f8faff;
+        color: #1e293b;
+        margin: 0;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Nunito', sans-serif;
+    }
+
+    ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #bfdbfe;
+        border-radius: 999px;
+    }
+    /* Browser defaults corresponding to the original Tailwind reset. */
+    html {
+        line-height: 1.5;
+        -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+        min-width: 320px;
+    }
+
+    h1, h2, h3, h4, h5, h6, p {
+        margin: 0;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        font-size: inherit;
+        font-weight: inherit;
+    }
+
+    a {
+        color: inherit;
+        text-decoration: inherit;
+    }
+
+    button, input, select, textarea {
+        font: inherit;
+        color: inherit;
+    }
+
+    button {
+        appearance: button;
+    }
+
+        button:disabled {
+            cursor: not-allowed;
+        }
+
+    img, svg {
+        display: block;
+        max-width: 100%;
+    }
+
+    textarea {
+        resize: vertical;
+    }
+
+    :focus-visible {
+        outline: 3px solid #2563eb;
+        outline-offset: 3px;
+    }
+
+    .static-page-link {
+        text-decoration: none;
+    }
+
+    a.static-page-link {
+        display: inline-block;
+    }
+
+    a.static-feature-link {
+        display: block;
+    }
+
+    .static-page-link:hover {
+        filter: brightness(0.97);
+        transition: 0.1s;
+    }
+
+    .mobile-menu {
+        display: none;
+    }
+
+        .mobile-menu summary {
+            cursor: pointer;
+            list-style: none;
+        }
+
+            .mobile-menu summary::-webkit-details-marker {
+                display: none;
+            }
+
+    .mobile-menu-links {
+        position: absolute;
+        top: 64px;
+        right: 12px;
+        left: 12px;
+        padding: 12px;
+        background: #fff;
+        border: 1px solid #dbeafe;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(37,99,235,0.12);
+    }
+
+        .mobile-menu-links a {
+            display: block;
+            padding: 10px 12px;
+            color: #475569;
+            border-radius: 8px;
+        }
+
+            .mobile-menu-links a[aria-current="page"] {
+                background: #eff6ff;
+                color: #2563eb;
+                font-weight: 600;
+            }
+    media (max-width: 768px) {
+        .hidden-mobile
+
+    {
+        display: none !important;
+    }
+
+    .mobile-menu {
+        display: block;
+    }
+
+    .static-header {
+        padding-right: 14px;
+        padding-left: 14px;
+        gap: 10px;
+    }
+
+    }
+    media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after
+
+    {
+        transition: none !important;
+        animation: none !important;
+    }
+
+    }
+
+
+    media (max-width: 768px) {
+        .hidden-mobile
+
+    {
+        display: none !important;
+    }
+
+    .show-mobile {
+        display: block !important;
+    }
+
+    }
+    media (min-width: 769px) {
+        .show-mobile
+
+    {
+        display: none !important;
+    }
+
+    }
+
+
+    /* Extracted original page and navigation styles. */
+    .specialists-style-001 {
+        background: #fff;
+        border-bottom: 1px solid #dbeafe;
+        position: sticky;
+        top: 0;
+        z-index: 50;
+    }
+
+    .specialists-style-002 {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 64px;
+    }
+
+    .specialists-style-003 {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+    }
+
+    .specialists-style-004 {
+        width: 36px;
+        height: 36px;
+    }
+
+    .specialists-style-005 {
+        color: #fff;
+        font-family: Nunito, sans-serif;
+        font-weight: 800;
+        font-size: 18px;
+    }
+
+    .specialists-style-006 {
+        font-family: Nunito, sans-serif;
+        font-weight: 800;
+        font-size: 20px;
+        color: #1e40af;
+    }
+
+    .specialists-style-007 {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .specialists-style-008 {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 7px 14px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 400;
+        color: #475569;
+        transition: all 0.15s;
+    }
+
+    .specialists-style-009 {
+        background: #eff6ff;
+        border: none;
+        cursor: pointer;
+        padding: 7px 14px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        color: #2563eb;
+        transition: all 0.15s;
+    }
+
+    .specialists-style-010 {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .specialists-style-011 {
+        background: #dc2626;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 700;
+        font-family: Nunito, sans-serif;
+        transition: background 0.15s;
+        white-space: nowrap;
+    }
+
+    .specialists-style-012 {
+        width: 22px;
+        height: 2px;
+        background: #475569;
+        margin-bottom: 5px;
+        border-radius: 2px;
+    }
+
+    .specialists-style-013 {
+        width: 22px;
+        height: 2px;
+        background: #475569;
+        border-radius: 2px;
+    }
+
+    .specialists-style-014 {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 48px 24px;
+    }
+
+    .specialists-style-015 {
+        font-family: Nunito, sans-serif;
+        font-weight: 800;
+        font-size: 30px;
+        color: #1e40af;
+        margin: 0 0 8px;
+    }
+
+    .specialists-style-016 {
+        color: #64748b;
+        font-size: 15px;
+        margin-bottom: 36px;
+    }
+
+    .specialists-style-017 {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 28px;
+    }
+
+    .specialists-style-018 {
+        flex: 1 1 260px;
+        border: 1.5px solid #dbeafe;
+        border-radius: 10px;
+        padding: 10px 14px;
+        font-size: 14px;
+        font-family: Inter, sans-serif;
+        color: #1e293b;
+        outline: none;
+        background: #fff;
+    }
+
+    .specialists-style-019 {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-bottom: 32px;
+    }
+
+    .specialists-style-020 {
+        background: #2563eb;
+        color: #fff;
+        border: 1.5px solid #2563eb;
+        border-radius: 20px;
+        padding: 6px 16px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.15s;
+    }
+
+    .specialists-style-021:hover {
+        background: #2563eb;
+        color: #fff;
+        border: 1.5px solid #2563eb;
+        font-weight: 500;
+    }
+
+    .specialists-style-021 {
+        background: #fff;
+        color: #475569;
+        border: 1.5px solid #e2e8f0;
+        border-radius: 20px;
+        padding: 6px 16px;
+        font-size: 13px;
+        font-weight: 400;
+        cursor: pointer;
+        transition: all 0.15s;
+    }
+
+    .specialists-style-022 {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+    }
+
+    media (max-width: 420px) {
+        .specialists-style-022
+
+    {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    }
+
+    .specialists-style-023 {
+        background: #fff;
+        border: 1px solid #dbeafe;
+        border-radius: 16px;
+        padding: 22px;
+        transition: all 0.2s;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .specialists-style-024 {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+    }
+
+    .specialists-style-025 {
+        width: 48px;
+        height: 48px;
+        border-radius: 14px;
+        background: linear-gradient(135deg, #eff6ff, #dbeafe);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        flex-shrink: 0;
+    }
+
+    .specialists-style-026 {
+        flex: 1;
+    }
+
+    .specialists-style-027 {
+        font-family: Nunito, sans-serif;
+        font-weight: 700;
+        font-size: 15px;
+        color: #1e293b;
+        line-height: 1.3;
+    }
+
+    .specialists-style-028 {
+        font-size: 13px;
+        color: #2563eb;
+        font-weight: 500;
+        margin-top: 2px;
+    }
+
+    .specialists-style-029 {
+        font-size: 12px;
+        color: #94a3b8;
+        margin-top: 2px;
+    }
+
+    .specialists-style-030 {
+        background: #f0fdf4;
+        color: #16a34a;
+        border: 1px solid #86efac;
+        border-radius: 20px;
+        padding: 3px 10px;
+        font-size: 11px;
+        font-weight: 600;
+        flex-shrink: 0;
+    }
+
+    .specialists-style-031 {
+        color: #64748b;
+        font-size: 13px;
+        line-height: 1.6;
+        margin: 0;
+    }
+
+    .specialists-style-032 {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #3b82f6;
+        font-size: 13px;
+        font-weight: 600;
+        padding: 0;
+        text-align: left;
+    }
+
+    .specialists-style-032:hover {
+        filter: brightness(0.97);
+        transform: scale(1.1);
+        transition: 0.1s;
+        padding: 0 0 0 10px;
+    }
+
+    .specialists-style-033 {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+    }
+
+    .specialists-style-034 {
+        background: #eff6ff;
+        color: #2563eb;
+        border: 1px solid #bfdbfe;
+        border-radius: 20px;
+        padding: 3px 10px;
+        font-size: 11px;
+        font-weight: 500;
+    }
+
+    .specialists-style-035 {
+        border-top: 1px solid #f1f5f9;
+        padding-top: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .specialists-style-036 {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #1e293b;
+        text-decoration: none;
+        font-size: 13px;
+    }
+
+    .specialists-style-037 {
+        font-weight: 500;
+    }
+
+    .specialists-style-038 {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #2563eb;
+        text-decoration: none;
+        font-size: 13px;
+    }
+
+</style>
+
+@code {
+    private bool _isHover;
+}

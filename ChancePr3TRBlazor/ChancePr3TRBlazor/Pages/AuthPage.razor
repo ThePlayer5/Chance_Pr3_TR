@@ -1,0 +1,509 @@
+﻿@page "/auth"
+
+<PageTitle>Авторизация</PageTitle>
+
+<body>
+    <nav aria-label="Основная навигация" class="auth-style-001">
+        <div class="static-header auth-style-002">
+            <NavLink href="/" class="" @onmouseenter="() => _isHover = true" @onmouseleave="() => _isHover = false">
+                <div class="auth-style-003">
+                    <img src="@(_isHover ? "chance-gif.gif" : "/chance.png")" class="auth-style-004" alt="Chance logo" />
+                    <span class="auth-style-006">Шанс</span>
+                </div>
+            </NavLink>
+            <div class="hidden-mobile auth-style-007">
+                <NavLink href="/" class="static-page-link auth-style-008">Главная</NavLink>
+                <NavLink href="/tracker" class="static-page-link auth-style-008">Настроение</NavLink>
+                <NavLink href="/chat" class="static-page-link auth-style-008">Чат</NavLink>
+                <NavLink href="/specials" class="static-page-link auth-style-008">Специалисты</NavLink>
+                <NavLink href="/about" class="static-page-link auth-style-008">О сервисе</NavLink>
+            </div>
+            <div class="auth-style-010">
+                <NavLink href="/crisis" class="static-page-link auth-style-011">🆘 Срочная помощь</NavLink>
+                <details class="mobile-menu">
+                    <summary aria-label="Меню">
+                        <div class="auth-style-012"></div>
+                        <div class="auth-style-012"></div>
+                        <div class="auth-style-013"></div>
+                    </summary>
+                    <div class="mobile-menu-links">
+                        <NavLink href="/">Главная</NavLink>
+                        <NavLink href="/tracker">Трекер настроения</NavLink>
+                        <NavLink href="/chat">Анонимный чат</NavLink>
+                        <NavLink href="/specials">База специалистов</NavLink>
+                        <NavLink href="/crisis">Кризисная помощь</NavLink>
+                        <NavLink href="/about">О сервисе</NavLink>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </nav>
+    <main>
+        <div class="auth-style-014">
+            <div class="auth-style-015">
+                <div class="auth-style-016">🔐</div>
+                <h1 class="auth-style-017">Добро пожаловать</h1>
+                <p class="auth-style-018">Войдите, чтобы продолжить работу с дневником настроения</p>
+            </div>
+            <div class="auth-style-019">
+                <div class="auth-style-020">
+                    <label class="auth-style-021" for="auth-email">Email</label>
+                    <input id="auth-email" type="email" class="auth-style-022" placeholder="you@example.com" />
+                </div>
+                <div class="auth-style-020">
+                    <label class="auth-style-021" for="auth-password">Пароль</label>
+                    <input id="auth-password" type="password" class="auth-style-022" placeholder="••••••••" />
+                </div>
+                <div class="auth-style-023">
+                    <label class="auth-style-024">
+                        <input type="checkbox" class="auth-style-025" />
+                        <span class="auth-style-026">Запомнить меня</span>
+                    </label>
+                    <NavLink href="" class="auth-style-027">Забыли пароль?</NavLink>
+                </div>
+                <button type="button" class="auth-style-028">Войти</button>
+                <div class="auth-style-029">
+                    <span class="auth-style-030">Нет аккаунта?</span>
+                    <NavLink href="/reg" class="auth-style-031">Зарегистрироваться</NavLink>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+
+<style>
+    import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap');
+
+    :root {
+        --font-display: 'Nunito', sans-serif;
+        --font-body: 'Inter', sans-serif;
+        --color-blue-50: #eff6ff;
+        --color-blue-100: #dbeafe;
+        --color-blue-200: #bfdbfe;
+        --color-blue-400: #60a5fa;
+        --color-blue-500: #3b82f6;
+        --color-blue-600: #2563eb;
+        --color-blue-700: #1d4ed8;
+        --color-blue-800: #1e40af;
+        --color-crisis: #dc2626;
+        --color-crisis-hover: #b91c1c;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: #f8faff;
+        color: #1e293b;
+        margin: 0;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Nunito', sans-serif;
+    }
+
+    ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #bfdbfe;
+        border-radius: 999px;
+    }
+
+    html {
+        line-height: 1.5;
+        -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+        min-width: 320px;
+    }
+
+    h1, h2, h3, h4, h5, h6, p {
+        margin: 0;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        font-size: inherit;
+        font-weight: inherit;
+    }
+
+    a {
+        color: inherit;
+        text-decoration: inherit;
+    }
+
+    button, input, select, textarea {
+        font: inherit;
+        color: inherit;
+    }
+
+    button {
+        appearance: button;
+    }
+
+        button:disabled {
+            cursor: not-allowed;
+        }
+
+    img, svg {
+        display: block;
+        max-width: 100%;
+    }
+
+    :focus-visible {
+        outline: 3px solid #2563eb;
+        outline-offset: 3px;
+    }
+
+    .static-page-link {
+        text-decoration: none;
+    }
+
+    a.static-page-link {
+        display: inline-block;
+    }
+
+    .static-page-link:hover {
+        filter: brightness(0.97);
+        transition: 0.1s;
+    }
+
+    .mobile-menu {
+        display: none;
+    }
+
+        .mobile-menu summary {
+            cursor: pointer;
+            list-style: none;
+        }
+
+            .mobile-menu summary::-webkit-details-marker {
+                display: none;
+            }
+
+    .mobile-menu-links {
+        position: absolute;
+        top: 64px;
+        right: 12px;
+        left: 12px;
+        padding: 12px;
+        background: #fff;
+        border: 1px solid #dbeafe;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(37,99,235,0.12);
+    }
+
+        .mobile-menu-links a {
+            display: block;
+            padding: 10px 12px;
+            color: #475569;
+            border-radius: 8px;
+        }
+
+            .mobile-menu-links a[aria-current="page"] {
+                background: #eff6ff;
+                color: #2563eb;
+                font-weight: 600;
+            }
+
+    media (max-width: 768px) {
+        .hidden-mobile
+
+    {
+        display: none !important;
+    }
+
+    .mobile-menu {
+        display: block;
+    }
+
+    .static-header {
+        padding-right: 14px;
+        padding-left: 14px;
+        gap: 10px;
+    }
+
+    }
+
+    media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after
+
+    {
+        transition: none !important;
+        animation: none !important;
+    }
+
+    }
+
+    /* Навигация */
+    .auth-style-001 {
+        background: #fff;
+        border-bottom: 1px solid #dbeafe;
+        position: sticky;
+        top: 0;
+        z-index: 50;
+    }
+
+    .auth-style-002 {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 64px;
+    }
+
+    .auth-style-003 {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+    }
+
+    .auth-style-004 {
+        width: 36px;
+        height: 36px;
+    }
+
+    .auth-style-006 {
+        font-family: Nunito, sans-serif;
+        font-weight: 800;
+        font-size: 20px;
+        color: #1e40af;
+    }
+
+    .auth-style-007 {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .auth-style-008 {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 7px 14px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 400;
+        color: #475569;
+        transition: all 0.15s;
+    }
+
+    .auth-style-010 {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .auth-style-011 {
+        background: #dc2626;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 700;
+        font-family: Nunito, sans-serif;
+        transition: background 0.15s;
+        white-space: nowrap;
+    }
+
+    .auth-style-012 {
+        width: 22px;
+        height: 2px;
+        background: #475569;
+        margin-bottom: 5px;
+        border-radius: 2px;
+    }
+
+    .auth-style-013 {
+        width: 22px;
+        height: 2px;
+        background: #475569;
+        border-radius: 2px;
+    }
+
+    /* Форма авторизации */
+    .auth-style-014 {
+        max-width: 440px;
+        margin: 0 auto;
+        padding: 64px 24px;
+    }
+
+    .auth-style-015 {
+        text-align: center;
+        margin-bottom: 32px;
+    }
+
+    .auth-style-016 {
+        width: 72px;
+        height: 72px;
+        margin: 0 auto 20px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32px;
+        box-shadow: 0 10px 24px rgba(37,99,235,0.25);
+    }
+
+    .auth-style-017 {
+        font-family: Nunito, sans-serif;
+        font-weight: 800;
+        font-size: 28px;
+        color: #1e40af;
+        margin: 0 0 8px;
+    }
+
+    .auth-style-018 {
+        font-size: 14px;
+        color: #64748b;
+    }
+
+    .auth-style-019 {
+        background: #fff;
+        border: 1px solid #dbeafe;
+        border-radius: 20px;
+        padding: 32px;
+        box-shadow: 0 8px 24px rgba(37,99,235,0.06);
+    }
+
+    .auth-style-020 {
+        margin-bottom: 18px;
+    }
+
+    .auth-style-021 {
+        display: block;
+        font-size: 13px;
+        font-weight: 600;
+        color: #1e293b;
+        margin-bottom: 6px;
+    }
+
+    .auth-style-022 {
+        width: 100%;
+        padding: 11px 14px;
+        border: 1.5px solid #dbeafe;
+        border-radius: 10px;
+        background: #f8faff;
+        font-size: 14px;
+        color: #1e293b;
+        transition: border 0.15s, background 0.15s;
+    }
+
+        .auth-style-022::placeholder {
+            color: #94a3b8;
+        }
+
+        .auth-style-022:focus {
+            outline: none;
+            border-color: #2563eb;
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
+        }
+
+    .auth-style-023 {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 22px;
+    }
+
+    .auth-style-024 {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+    }
+
+    .auth-style-025 {
+        width: 16px;
+        height: 16px;
+        accent-color: #2563eb;
+        cursor: pointer;
+    }
+
+    .auth-style-026 {
+        font-size: 13px;
+        color: #475569;
+    }
+
+    .auth-style-027 {
+        font-size: 13px;
+        color: #2563eb;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+        .auth-style-027:hover {
+            color: #1d4ed8;
+            text-decoration: underline;
+        }
+
+    .auth-style-028 {
+        width: 100%;
+        background: #2563eb;
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        padding: 12px;
+        font-size: 15px;
+        font-weight: 700;
+        font-family: Nunito, sans-serif;
+        cursor: pointer;
+        transition: background 0.15s, transform 0.1s;
+    }
+
+        .auth-style-028:hover {
+            background: #1d4ed8;
+        }
+
+        .auth-style-028:active {
+            transform: scale(0.99);
+        }
+
+    .auth-style-029 {
+        margin-top: 24px;
+        padding-top: 20px;
+        border-top: 1px solid #f1f5f9;
+        text-align: center;
+        font-size: 14px;
+        color: #64748b;
+    }
+
+    .auth-style-030 {
+        margin-right: 6px;
+    }
+
+    .auth-style-031 {
+        color: #2563eb;
+        font-weight: 700;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+        .auth-style-031:hover {
+            color: #1d4ed8;
+            text-decoration: underline;
+        }
+</style>
+
+@code {
+    private bool _isHover;
+}
