@@ -5,9 +5,9 @@
 <body>
     <nav aria-label="Основная навигация" class="reg-style-001">
         <div class="static-header reg-style-002">
-            <NavLink href="/" class="" >
+           <NavLink href="/" class="" @onmouseenter="() => _isHover = true" @onmouseleave="() => _isHover = false">
                 <div class="reg-style-003">
-                    <img src="/chance.png" class="reg-style-004" alt="Chance logo" />
+                    <img src="@(_isHover ? "chance-gif.gif" : "/chance.png")" class="reg-style-004" alt="Chance logo" />
                     <span class="reg-style-006">Шанс</span>
                 </div>
             </NavLink>
