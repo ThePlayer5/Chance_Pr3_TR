@@ -49,6 +49,31 @@ namespace ChancePr3TRBlazor.ApiRequest.Services
             await _hubConnection.StartAsync();
         }
 
+        public async Task AddActiveUser(int userId)
+        {
+            if (_hubConnection?.State == HubConnectionState.Connected)
+            {
+                await _hubConnection.InvokeAsync("AddActiveUser", userId);
+                IsUserActive = true;
+            }
+        }
+
+        public async Task AddChatUser(int userId, int chatId)
+        {
+            if (_hubConnection?.State == HubConnectionState.Connected)
+            {
+            await _hubConnection.InvokeAsync("AddChatUser", userId, chatId);
+            }
+        }
+
+        public async Task SendMessage(int chatId, int senderId, string text)
+        {
+            if (_hubConnection?.State == HubConnectionState.Connected)
+        {
+            await _hubConnection.InvokeAsync("SendMessage", chatId, senderId, text);
+        }
+        }
+
         public bool IsConnected => _hubConnection?.State == HubConnectionState.Connected;
         public bool IsUserActive { get; set; }
     }
