@@ -121,9 +121,9 @@ public class UserService : IUserService
 
     public async Task<IActionResult> GetDoctors()
     {
-        var doctors = await _context.Doctors.ToListAsync();
+        var docs = await _context.Doctors.ToListAsync();
 
-        if (doctors == null)
+        if (docs == null)
         {
             return new NotFoundObjectResult(new
             {
@@ -134,7 +134,7 @@ public class UserService : IUserService
         return new OkObjectResult(new
         {
             status = true,
-            data = new { doctors = doctors }
+            data = new { docs = docs }
         });
     }
 }

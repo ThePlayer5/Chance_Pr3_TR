@@ -15,6 +15,7 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https:/
 builder.Services.AddScoped<RequestApi>();
 
 builder.Services.AddSingleton<UserService>();
+builder.Services.AddSingleton<DocService>();
 
 builder.Services.AddScoped<ChatService>();
 

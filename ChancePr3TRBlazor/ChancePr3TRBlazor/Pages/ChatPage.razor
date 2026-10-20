@@ -1,6 +1,9 @@
 ﻿@page "/chat"
 @using ChancePr3TRBlazor.ApiRequest.Services
 @inject UserService UserService
+@inject DocService DocService
+@inject ChatService ChatService
+@inject NavigationManager Navigation
 
 <PageTitle>Chat</PageTitle>
 
@@ -48,7 +51,9 @@
                 <div class="chat-style-010">
                     <div class="chat-style-016">💬</div>
                     <div>
-                        <div class="chat-style-017">Анонимный чат поддержки</div>
+                        <div class="chat-style-017">
+                            @(DocService.CurrentDoc == null ? "Анонимный пользователь" : DocService.CurrentDoc.fullname)
+                        </div>
                         <div class="chat-style-018">
                             <div class="chat-style-019"></div>
                             <span class="chat-style-020">Онлайн</span>
@@ -56,21 +61,30 @@
                     </div>
                 </div>
                 <div class="chat-style-021">
-                    <button type="button" class="chat-style-022">Завершить</button>
+                    <button type="button" class="chat-style-022" @onclick="ExitChat_Click">Завершить</button>
                 </div>
             </div>
             <div class="chat-style-023">
-                <div class="chat-style-024">
-                    <div class="chat-style-025">
-                        <p class="chat-style-026">Привет! Я здесь, чтобы выслушать вас. Можете писать анонимно — имя указывать не нужно. Что вас беспокоит?</p>
-                        <p class="chat-style-027">13:43</p>
-                    </div>
-                </div>
-                <div></div>
+                @if (ChatService.Messages.Count <= 0 && ChatService.Messages != null)
+                {
+                    <p class="chat-style-026">Сообщения отсутствуют!</p>
+                }
+                else
+                {
+                    foreach (var message in ChatService.Messages)
+                    {
+                        <div class="chat-style-024">
+                            <div class="chat-style-025">
+                                <p class="chat-style-026">@message.Text</p>
+                                <p class="chat-style-027">@message.SendTime.ToString("d MMM yy HH:mm")</p>
+                            </div>
+                        </div>
+                    }
+                }
             </div>
             <div class="chat-style-028">
-                <textarea placeholder="Напишите сообщение... (Enter для отправки)" rows="2" aria-label="Напишите сообщение... (Enter для отправки)" class="chat-style-029"></textarea>
-                <button type="button" class="chat-style-030">➤</button>
+                <textarea placeholder="Напишите сообщение... (Enter для отправки)" rows="2" aria-label="Напишите сообщение... (Enter для отправки)" class="chat-style-029" @bind="message"></textarea>
+                <button type="button" class="chat-style-030" @onclick="AddMessage">➤</button>
             </div>
             <p class="chat-style-031">Имя указывать не нужно. Всё анонимно и конфиденциально.</p>
         </div>
@@ -584,4 +598,81 @@
 
 @code {
     private bool _isHover;
+
+    private string message = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            if (DocService.CurrentDoc == null || UserService.CurrentUser == null)
+            {
+                Navigation.NavigateTo("specials");
+                return;
+            }
+
+            ChatService.OnChatUsersUpdate = StateHasChanged;
+            ChatService.OnMessageReceived = StateHasChanged;
+
+            await ChatService.Connect();
+            await AddNewChatUser();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+
+    private async Task AddNewChatUser()
+    {
+        try
+        {
+            if (UserService.CurrentUser == null) return;
+            if (DocService.CurrentDoc == null) return;
+
+            await ChatService.AddChatUser(UserService.CurrentUser.userId, DocService.CurrentDoc.doctorId);
+
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+
+    private async Task AddMessage()
+    {
+        try
+        {
+            if (ChatService.IsUserActive == false) return;
+            if (UserService.CurrentUser == null) return;
+            if (DocService.CurrentDoc == null) return;
+
+            if (string.IsNullOrEmpty(message)) return;
+
+            await ChatService.SendMessage(DocService.CurrentDoc.doctorId, UserService.CurrentUser.userId, message);
+
+            message = "";
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+
+    private async Task ExitChat_Click()
+    {
+        try
+        {
+            ChatService.ChatUsers.Clear();
+            ChatService.Messages.Clear();
+            Navigation.NavigateTo("specials");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+
 }

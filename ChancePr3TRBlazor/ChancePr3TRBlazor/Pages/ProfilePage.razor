@@ -69,7 +69,7 @@
                             <span class="profile-style-027">📊</span>
                             <div class="profile-style-028">
                                 <div class="profile-style-029">Записей настроения</div>
-                                <div class="profile-style-006">23</div>
+                                <div class="profile-style-006">@moods.Count</div>
                             </div>
                         </div>
                         <div class="profile-style-026">
@@ -83,7 +83,7 @@
                             <span class="profile-style-027">⭐</span>
                             <div class="profile-style-028">
                                 <div class="profile-style-029">Средний балл</div>
-                                <div class="profile-style-006">3.7</div>
+                                <div class="profile-style-006">@avarageMood</div>
                             </div>
                         </div>
                     </div>
@@ -92,37 +92,50 @@
                 <div class="profile-style-017">
                     <h3 class="profile-style-031">Последние записи настроения</h3>
                     <div class="profile-style-032">
-                        <div class="profile-style-033">
-                            <span class="profile-style-027">😄</span>
-                            <span class="profile-style-034">Отлично</span>
-                            <span class="profile-style-029">19 сент</span>
-                        </div>
-                        <div class="profile-style-033">
-                            <span class="profile-style-027">🙂</span>
-                            <span class="profile-style-035">Хорошо</span>
-                            <span class="profile-style-029">18 сент</span>
-                        </div>
-                        <div class="profile-style-033">
-                            <span class="profile-style-027">😐</span>
-                            <span class="profile-style-036">Нейтрально</span>
-                            <span class="profile-style-029">16 сент</span>
-                        </div>
-                        <div class="profile-style-033">
-                            <span class="profile-style-027">😔</span>
-                            <span class="profile-style-037">Плохо</span>
-                            <span class="profile-style-029">15 сент</span>
-                        </div>
-                        <div class="profile-style-033">
-                            <span class="profile-style-027">😄</span>
-                            <span class="profile-style-034">Отлично</span>
-                            <span class="profile-style-029">14 сент</span>
-                        </div>
+                        @if (moods.Count == 0)
+                        {
+                            <h3 class="profile-style-031">Нет записей</h3>
+                        }
+                        else
+                        {
+                            int rowCount = 0;
+                            foreach (var mood in moods.OrderByDescending(m => m.createdAt))
+                            {
+                                if (rowCount >= 5) break;
+                                string levelSmile = "";
+                                switch (mood.moodLevel)
+                                {
+                                    case 5:
+                                        levelSmile = "😄 Отлично";
+                                        break;
+                                    case 4:
+                                        levelSmile = "🙂 Хорошо";
+                                        break;
+                                    case 3:
+                                        levelSmile = "😐 Нейтрально";
+                                        break;
+                                    case 2:
+                                        levelSmile = "😔 Плохо";
+                                        break;
+                                    case 1:
+                                        levelSmile = "😢 Ужасно";
+                                        break;
+                                }
+                                rowCount++;
+
+                                <div class="profile-style-033">
+                                    <span class="profile-style-027">@levelSmile.Split(' ').First()</span>
+                                    <span class="profile-style-034">@levelSmile.Split(' ').Last()</span>
+                                    <span class="profile-style-029">@mood.createdAt.ToString("d MMM")</span>
+                                </div>
+                            }
+                        }
                     </div>
                 </div>
                 <div class="profile-style-017">
                     <h3 class="profile-style-024">Настройки</h3>
                     <div class="profile-style-045">
-                        <button type="button" class="profile-style-046">Выйти из аккаунта</button>
+                        <button type="button" class="profile-style-046" @onclick="Exit_Click">Выйти из аккаунта</button>
                     </div>
                 </div>
             </div>
@@ -742,6 +755,8 @@
 
 @code {
     private bool _isHover;
+    private string avarageMood = "";
+    private List<MoodDataShort> moods = new();
     private UserDataShort userDataShort = new();
     [Inject] private RequestApi _requestApi { get; set; }
 
@@ -756,6 +771,7 @@
             }
 
             await GetProfileData();
+            await GetAllMoods();
         }
         catch (Exception ex)
         {
@@ -779,6 +795,50 @@
             userDataShort = response.data;
 
             Console.WriteLine($"id: {userDataShort.userId}, email: {userDataShort.email}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+
+    private async Task GetAllMoods()
+    {
+        try
+        {
+            var moodsData = await _requestApi.GetMoodAsync();
+            moods = moodsData.data.moods ?? new List<MoodDataShort>();
+            moods = moods.Where(m => m.userId == UserService.CurrentUser.userId).ToList();
+
+            CalculateStats();
+
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+
+    private void CalculateStats()
+    {
+        try
+        {
+            avarageMood = $"{moods.Sum(m => m.moodLevel) / moods.Count} 🙂";
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+
+    private void Exit_Click()
+    {
+        try
+        {
+            UserService.ClearUser();
+
+            Navigation.NavigateTo("/");
         }
         catch (Exception ex)
         {

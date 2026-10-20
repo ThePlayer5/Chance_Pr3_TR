@@ -98,7 +98,7 @@
                 }
                 else
                 {
-                    foreach (var mood in moods)
+                    foreach (var mood in moods.OrderByDescending(m => m.createdAt))
                     {
                         string levelSmile = "";
                         switch (mood.moodLevel)
@@ -751,30 +751,6 @@
         }
     }
 
-    private void CalculateStats()
-    {
-        avarageMood = $"{moods.Sum(m => m.moodLevel) / moods.Count} 🙂";
-        int maxLevel = moods.Max(m => m.moodLevel);
-        switch (maxLevel)
-        {
-            case 5:
-                maxMoodLevel = "😄";
-                break;
-            case 4:
-                maxMoodLevel = "🙂";
-                break;
-            case 3:
-                maxMoodLevel = "😐";
-                break;
-            case 2:
-                maxMoodLevel = "😔";
-                break;
-            case 1:
-                maxMoodLevel = "😢";
-                break;
-        }
-    }
-
     private async Task GetAllMoods()
     {
         try
@@ -793,10 +769,47 @@
         }
     }
 
+    private void CalculateStats()
+    {
+        try
+        {
+            avarageMood = $"{moods.Sum(m => m.moodLevel) / moods.Count} 🙂";
+            int maxLevel = moods.Max(m => m.moodLevel);
+            switch (maxLevel)
+            {
+                case 5:
+                    maxMoodLevel = "😄";
+                    break;
+                case 4:
+                    maxMoodLevel = "🙂";
+                    break;
+                case 3:
+                    maxMoodLevel = "😐";
+                    break;
+                case 2:
+                    maxMoodLevel = "😔";
+                    break;
+                case 1:
+                    maxMoodLevel = "😢";
+                    break;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+
     private async Task CreateMood_Click()
     {
         try
         {
+            if (UserService.CurrentUser == null)
+            {
+                Console.WriteLine($"Пользователь не в системе!");
+                return;
+            }
+
             if (reqDataMood == null
                 || reqDataMood.moodLevel == 0)
             {

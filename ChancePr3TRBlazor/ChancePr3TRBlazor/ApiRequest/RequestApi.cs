@@ -100,6 +100,8 @@ namespace ChancePr3TRBlazor.ApiRequest
                     PropertyNameCaseInsensitive = true,
                 });
 
+                Console.WriteLine(responseContent);
+
                 return data ?? new DocsData();
             }
             catch (Exception ex)
