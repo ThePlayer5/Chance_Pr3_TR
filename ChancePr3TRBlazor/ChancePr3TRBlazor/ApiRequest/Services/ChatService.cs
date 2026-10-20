@@ -62,16 +62,16 @@ namespace ChancePr3TRBlazor.ApiRequest.Services
         {
             if (_hubConnection?.State == HubConnectionState.Connected)
             {
-            await _hubConnection.InvokeAsync("AddChatUser", userId, chatId);
+                await _hubConnection.InvokeAsync("AddChatUser", userId, chatId);
             }
         }
 
         public async Task SendMessage(int chatId, int senderId, string text)
         {
             if (_hubConnection?.State == HubConnectionState.Connected)
-        {
-            await _hubConnection.InvokeAsync("SendMessage", chatId, senderId, text);
-        }
+            {
+                await _hubConnection.InvokeAsync("SendMessage", chatId, senderId, text);
+            }
         }
 
         public bool IsConnected => _hubConnection?.State == HubConnectionState.Connected;

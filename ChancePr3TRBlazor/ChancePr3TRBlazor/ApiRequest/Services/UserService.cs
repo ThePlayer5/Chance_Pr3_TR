@@ -21,10 +21,8 @@
 
     public class User
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string LoginT { get; set; }
-        public string Password { get; set; }
-        public string Role { get; set; }
+        public int userId { get; set; }
+        public int roleId { get; set; }
+        public string? token { get; set; }
     }
 }

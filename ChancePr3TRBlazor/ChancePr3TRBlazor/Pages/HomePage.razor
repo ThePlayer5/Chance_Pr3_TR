@@ -10,7 +10,7 @@
             <NavLink href="/" class="" aria-current="page" Match="NavLinkMatch.All"
                         @onmouseenter="() => _isHover = true" @onmouseleave="() => _isHover = false">
                 <div class="home-style-003">
-                    <img src="@(_isHover ? "chance-gif.gif" : "/chance.png")" class="home-style-004" alt="Chance logo"/>
+                    <img src="@(_isHover ? "chance-gif.gif" : "chance.png")" class="home-style-004" alt="Chance logo"/>
                     <span class="home-style-006">Шанс</span>
                 </div>
             </NavLink>
@@ -684,4 +684,6 @@
 
 @code {
     private bool _isHover;
+
+
 }

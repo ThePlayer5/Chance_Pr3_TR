@@ -1,4 +1,11 @@
 ﻿@page "/auth"
+@using ChancePr3TRBlazor.ApiRequest
+@using ChancePr3TRBlazor.ApiRequest.Models
+@using ChancePr3TRBlazor.ApiRequest.Services
+@using Syncfusion.Blazor.Popups
+@inject ChatService ChatService
+@inject UserService UserService
+@inject NavigationManager Navigation
 
 <PageTitle>Авторизация</PageTitle>
 
@@ -7,7 +14,7 @@
         <div class="static-header auth-style-002">
           <NavLink href="/" class="" @onmouseenter="() => _isHover = true" @onmouseleave="() => _isHover = false">
                 <div class="auth-style-003">
-                    <img src="@(_isHover ? "chance-gif.gif" : "/chance.png")" class="auth-style-004" alt="Chance logo" />
+                    <img src="@(_isHover ? "chance-gif.gif" : "chance.png")" class="auth-style-004" alt="Chance logo" />
                     <span class="auth-style-006">Шанс</span>
                 </div>
             </NavLink>
@@ -48,11 +55,11 @@
             <div class="auth-style-019">
                 <div class="auth-style-020">
                     <label class="auth-style-021" for="auth-email">Email</label>
-                    <input id="auth-email" type="email" class="auth-style-022" placeholder="you@example.com" />
+                    <input id="auth-email" type="email" class="auth-style-022" placeholder="you@example.com" @bind="@authUser.Email"/>
                 </div>
                 <div class="auth-style-020">
                     <label class="auth-style-021" for="auth-password">Пароль</label>
-                    <input id="auth-password" type="password" class="auth-style-022" placeholder="••••••••" />
+                    <input id="auth-password" type="password" class="auth-style-022" placeholder="••••••••" @bind="@authUser.Password"/>
                 </div>
                 <div class="auth-style-023">
                     <label class="auth-style-024">
@@ -61,7 +68,7 @@
                     </label>
                     <NavLink href="" class="auth-style-027">Забыли пароль?</NavLink>
                 </div>
-                <button type="button" class="auth-style-028">Войти</button>
+                <button type="button" class="auth-style-028" @onclick="AuthUser_Click">Войти</button>
                 <div class="auth-style-029">
                     <span class="auth-style-030">Нет аккаунта?</span>
                     <NavLink href="/reg" class="auth-style-031">Зарегистрироваться</NavLink>
@@ -506,4 +513,67 @@
 
 @code {
     private bool _isHover;
+    private AuthUser authUser = new();
+    [Inject] private RequestApi _requestApi { get; set; } 
+
+    private async Task ConnectAuthUser(User user)
+    {
+        try
+        {
+            if (user == null)
+            {
+                Console.WriteLine($"Ошибка идентификации пользователя!");
+                return;
+            }
+
+            ChatService.OnActiveUsersUpdate = StateHasChanged;
+            await ChatService.Connect();
+
+            await ChatService.AddActiveUser(user.userId);
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+
+    private async Task AuthUser_Click()
+    {
+        try
+        {
+            if (authUser == null
+                || string.IsNullOrWhiteSpace(authUser.Email)
+                || string.IsNullOrWhiteSpace(authUser.Password))
+            {
+                Console.WriteLine($"Все поля должны быть заполнены!");
+                return; 
+            }
+
+            var response = await _requestApi.AuthUserAsync(authUser);
+
+            Console.WriteLine($"Статус запроса: {response.status}");
+            if (response.status == false) return;
+
+            var user = new User
+            {
+                userId = response.userId,
+                roleId = response.roleId,
+                token = response.token
+            };
+
+            UserService.SetUser(user);
+            authUser = new();
+
+            await ConnectAuthUser(user);
+
+            Navigation.NavigateTo("profile");
+
+            Console.WriteLine($"id: {user.userId}, token: {user.token}, users count: {ChatService.ActiveUsers.Count}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
 }

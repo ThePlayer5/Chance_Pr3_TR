@@ -16,7 +16,7 @@ namespace ChancePr3TRBlazor.ApiRequest
         // MOOD
         public async Task<MoodData> GetMoodAsync()
         {
-            var url = "/GetMood";
+            var url = "api/User/GetMood";
 
             try
             {
@@ -46,13 +46,24 @@ namespace ChancePr3TRBlazor.ApiRequest
 
         public async Task<MoodCreateData> CreateMoodAsync(string authorization, ReqDataMood reqDataMood)
         {
-            var url = $"/CreateMood{authorization}";
+            var url = $"api/User/CreateMood";
 
             try
             {
-                var response = await _httpClient.PostAsJsonAsync(url, reqDataMood);
+                using var request = new HttpRequestMessage(HttpMethod.Post, url);
+                request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", authorization);
+                request.Content = JsonContent.Create(reqDataMood);
+
+                var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
                 response.EnsureSuccessStatusCode();
+
                 var responseContent = await response.Content.ReadAsStringAsync();
+
+                if (string.IsNullOrEmpty(responseContent))
+                {
+                    return new MoodCreateData();
+                }
+
                 var data = JsonSerializer.Deserialize<MoodCreateData>(responseContent, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true,
@@ -70,7 +81,7 @@ namespace ChancePr3TRBlazor.ApiRequest
         // DOCTOR
         public async Task<DocsData> GetDoctorsAsync()
         {
-            var url = "/GetDoctors";
+            var url = "api/User/GetDoctors";
 
             try
             {
@@ -101,7 +112,7 @@ namespace ChancePr3TRBlazor.ApiRequest
         // USER ACCOUNT
         public async Task<UserRegData> RegisterAsync(RegUserData regUserData)
         {
-            var url = "/Register";
+            var url = "api/Auth/Register";
 
             try
             {
@@ -124,7 +135,7 @@ namespace ChancePr3TRBlazor.ApiRequest
 
         public async Task<AuthResponse> AuthUserAsync(AuthUser authUser)
         {
-            var url = "/Authorize";
+            var url = "api/Auth/Authorize";
 
             try
             {
@@ -153,12 +164,16 @@ namespace ChancePr3TRBlazor.ApiRequest
 
         public async Task<UserData> CheckProfileAsync(string authorization)
         {
-            var url = $"/CheckProfile{authorization}";
+            var url = $"api/User/CheckProfile";
 
             try
             {
-                var response = await _httpClient.GetAsync(url).ConfigureAwait(false);
+                using var request = new HttpRequestMessage(HttpMethod.Get, url);
+                request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", authorization);
+
+                var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
                 response.EnsureSuccessStatusCode();
+
 
                 var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 

@@ -1,6 +1,9 @@
 ﻿@page "/tracker"
+@using ChancePr3TRBlazor.ApiRequest
+@using ChancePr3TRBlazor.ApiRequest.Models
 @using ChancePr3TRBlazor.ApiRequest.Services
 @inject UserService UserService
+@inject NavigationManager Navigation
 
 <PageTitle>MoodTracker</PageTitle>
 
@@ -9,7 +12,7 @@
         <div class="static-header mood-style-002">
             <NavLink href="/" class="" @onmouseenter="() => _isHover = true" @onmouseleave="() => _isHover = false">
                 <div class="mood-style-003">
-                    <img src="@(_isHover ? "chance-gif.gif" : "/chance.png")" class="mood-style-004" alt="Chance logo"/>
+                    <img src="@(_isHover ? "chance-gif.gif" : "chance.png")" class="mood-style-004" alt="Chance logo"/>
                     <span class="mood-style-006">Шанс</span>
                 </div>
             </NavLink>
@@ -49,168 +52,85 @@
             <div class="mood-style-017">
                 <p class="mood-style-018">Как вы себя чувствуете сегодня?</p>
                 <div class="mood-style-019">
-                    <button type="button" class="mood-style-020">
+                    <button type="button" class="mood-style-020" @onclick="() => reqDataMood.moodLevel = 5">
                         <span class="mood-style-021">😄</span>
                         <span class="mood-style-022">Отлично</span>
                     </button>
-                    <button type="button" class="mood-style-020">
+                    <button type="button" class="mood-style-020" @onclick="() => reqDataMood.moodLevel = 4">
                         <span class="mood-style-021">🙂</span>
                         <span class="mood-style-022">Хорошо</span>
                     </button>
-                    <button type="button" class="mood-style-020">
+                    <button type="button" class="mood-style-020" @onclick="() => reqDataMood.moodLevel = 3">
                         <span class="mood-style-021">😐</span>
                         <span class="mood-style-022">Нейтрально</span>
                     </button>
-                    <button type="button" class="mood-style-020">
+                    <button type="button" class="mood-style-020" @onclick="() => reqDataMood.moodLevel = 2">
                         <span class="mood-style-021">😔</span>
                         <span class="mood-style-022">Плохо</span>
                     </button>
-                    <button type="button" class="mood-style-020">
+                    <button type="button" class="mood-style-020" @onclick="() => reqDataMood.moodLevel = 1">
                         <span class="mood-style-021">😢</span>
                         <span class="mood-style-022">Ужасно</span>
                     </button>
                 </div>
-                <textarea placeholder="Что произошло? (необязательно)" rows="3" aria-label="Что произошло? (необязательно)" class="mood-style-023"></textarea>
-                <button type="button" class="mood-style-024">Сохранить</button>
+                <textarea placeholder="Что произошло? (необязательно)" rows="3" aria-label="Что произошло? (необязательно)" class="mood-style-023" @bind="@reqDataMood.note"></textarea>
+                <button type="button" class="mood-style-024" @onclick="CreateMood_Click">Сохранить</button>
             </div>
             <div class="mood-style-025">
                 <div>
-                    <div class="mood-style-026">3.7 🙂</div>
+                    <div class="mood-style-026">@avarageMood</div>
                     <div class="mood-style-027">Среднее за 7 дней</div>
                 </div>
                 <div>
-                    <div class="mood-style-026">7</div>
+                    <div class="mood-style-026">@moods.Count</div>
                     <div class="mood-style-027">Записей всего</div>
                 </div>
                 <div>
-                    <div class="mood-style-026">😄</div>
+                    <div class="mood-style-026">@maxMoodLevel</div>
                     <div class="mood-style-027">Лучшее настроение</div>
                 </div>
             </div>
-            @* <div class="mood-style-028">
-                <p class="mood-style-029">Последние 7 дней</p>
-                <div class="mood-style-030">
-                    <div class="mood-style-031">
-                        <div title="Нейтрально" class="mood-style-032"></div>
-                        <span class="mood-style-033">
-                            12
-                            сент.
-                        </span>
-                    </div>
-                    <div class="mood-style-031">
-                        <div title="Отлично" class="mood-style-034"></div>
-                        <span class="mood-style-033">
-                            13
-                            сент.
-                        </span>
-                    </div>
-                    <div class="mood-style-031">
-                        <div title="Хорошо" class="mood-style-035"></div>
-                        <span class="mood-style-033">
-                            14
-                            сент.
-                        </span>
-                    </div>
-                    <div class="mood-style-031">
-                        <div title="Плохо" class="mood-style-036"></div>
-                        <span class="mood-style-033">
-                            15
-                            сент.
-                        </span>
-                    </div>
-                    <div class="mood-style-031">
-                        <div title="Нейтрально" class="mood-style-032"></div>
-                        <span class="mood-style-033">
-                            16
-                            сент.
-                        </span>
-                    </div>
-                    <div class="mood-style-031">
-                        <div title="Отлично" class="mood-style-034"></div>
-                        <span class="mood-style-033">
-                            17
-                            сент.
-                        </span>
-                    </div>
-                    <div class="mood-style-031">
-                        <div title="Хорошо" class="mood-style-035"></div>
-                        <span class="mood-style-033">
-                            18
-                            сент.
-                        </span>
-                    </div>
-                </div>
-            </div> *@
             <h2 class="mood-style-037">История записей</h2>
             <div class="mood-style-038">
-                <div class="mood-style-039">
-                    <span class="mood-style-040">🙂</span>
-                    <div class="mood-style-041">
-                        <div class="mood-style-042">
-                            <span class="mood-style-043">Хорошо</span>
-                            <span class="mood-style-044">18 сентября</span>
+                @if (moods.Count == 0)
+                {
+                    <h3 class="mood-style-037">Нет записей</h3>
+                }
+                else
+                {
+                    foreach (var mood in moods)
+                    {
+                        string levelSmile = "";
+                        switch (mood.moodLevel)
+                        {
+                            case 5:
+                                levelSmile = "😄 Отлично";
+                                break;
+                            case 4:
+                                levelSmile = "🙂 Хорошо";
+                                break;
+                            case 3:
+                                levelSmile = "😐 Нейтрально";
+                                break;
+                            case 2:
+                                levelSmile = "😔 Плохо";
+                                break;
+                            case 1:
+                                levelSmile = "😢 Ужасно";
+                                break;
+                        }
+                        <div class="mood-style-039">
+                            <span class="mood-style-040">@levelSmile.Split(' ').First()</span>
+                            <div class="mood-style-041">
+                                <div class="mood-style-042">
+                                    <span class="mood-style-043">@levelSmile.Split(' ').Last()</span>
+                                    <span class="mood-style-044">@mood.createdAt.ToString("d MMMM yyyy HH:mm:ss")</span>
+                                </div>
+                                <p class="mood-style-045">@mood.note</p>
+                            </div>
                         </div>
-                        <p class="mood-style-045">Сдал зачёт по математике, настроение поднялось</p>
-                    </div>
-                </div>
-                <div class="mood-style-039">
-                    <span class="mood-style-040">😄</span>
-                    <div class="mood-style-041">
-                        <div class="mood-style-042">
-                            <span class="mood-style-046">Отлично</span>
-                            <span class="mood-style-044">17 сентября</span>
-                        </div>
-                        <p class="mood-style-045">Хороший день, встретился с друзьями</p>
-                    </div>
-                </div>
-                <div class="mood-style-039">
-                    <span class="mood-style-040">😐</span>
-                    <div class="mood-style-041">
-                        <div class="mood-style-042">
-                            <span class="mood-style-047">Нейтрально</span>
-                            <span class="mood-style-044">16 сентября</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="mood-style-039">
-                    <span class="mood-style-040">😔</span>
-                    <div class="mood-style-041">
-                        <div class="mood-style-042">
-                            <span class="mood-style-048">Плохо</span>
-                            <span class="mood-style-044">15 сентября</span>
-                        </div>
-                        <p class="mood-style-045">Много задач, устал</p>
-                    </div>
-                </div>
-                <div class="mood-style-039">
-                    <span class="mood-style-040">🙂</span>
-                    <div class="mood-style-041">
-                        <div class="mood-style-042">
-                            <span class="mood-style-043">Хорошо</span>
-                            <span class="mood-style-044">14 сентября</span>
-                        </div>
-                        <p class="mood-style-045">Нормально</p>
-                    </div>
-                </div>
-                <div class="mood-style-039">
-                    <span class="mood-style-040">😄</span>
-                    <div class="mood-style-041">
-                        <div class="mood-style-042">
-                            <span class="mood-style-046">Отлично</span>
-                            <span class="mood-style-044">13 сентября</span>
-                        </div>
-                        <p class="mood-style-045">Выходной, отдохнул</p>
-                    </div>
-                </div>
-                <div class="mood-style-039">
-                    <span class="mood-style-040">😐</span>
-                    <div class="mood-style-041">
-                        <div class="mood-style-042">
-                            <span class="mood-style-047">Нейтрально</span>
-                            <span class="mood-style-044">12 сентября</span>
-                        </div>
-                    </div>
-                </div>
+                    }
+                }
             </div>
         </div>
     </main>
@@ -812,7 +732,96 @@
 
 @code {
     private bool _isHover;
+    private string avarageMood = "";
+    private string maxMoodLevel = "";
+    private List<MoodDataShort> moods = new();
+    private ReqDataMood reqDataMood = new();
+    [Inject] private RequestApi _requestApi { get; set; }
 
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            if (UserService.CurrentUser == null) return;
+            await GetAllMoods();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
 
+    private void CalculateStats()
+    {
+        avarageMood = $"{moods.Sum(m => m.moodLevel) / moods.Count} 🙂";
+        int maxLevel = moods.Max(m => m.moodLevel);
+        switch (maxLevel)
+        {
+            case 5:
+                maxMoodLevel = "😄";
+                break;
+            case 4:
+                maxMoodLevel = "🙂";
+                break;
+            case 3:
+                maxMoodLevel = "😐";
+                break;
+            case 2:
+                maxMoodLevel = "😔";
+                break;
+            case 1:
+                maxMoodLevel = "😢";
+                break;
+        }
+    }
 
+    private async Task GetAllMoods()
+    {
+        try
+        {
+            var moodsData = await _requestApi.GetMoodAsync();
+            moods = moodsData.data.moods ?? new List<MoodDataShort>();
+            moods = moods.Where(m => m.userId == UserService.CurrentUser.userId).ToList();
+
+            CalculateStats();
+
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+
+    private async Task CreateMood_Click()
+    {
+        try
+        {
+            if (reqDataMood == null
+                || reqDataMood.moodLevel == 0)
+            {
+                Console.WriteLine($"Все поля должны быть заполнены!");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(reqDataMood.note)) reqDataMood.note = "";
+
+            string userToken = UserService.CurrentUser.token ?? "";
+
+            var response = await _requestApi.CreateMoodAsync(userToken, reqDataMood);
+
+            Console.WriteLine($"Статус запроса: {response.status}");
+            if (response.status == false) return;
+
+            reqDataMood = new();
+
+            await GetAllMoods();
+
+            Console.WriteLine($"Mood date: {reqDataMood.moodDate}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
 }

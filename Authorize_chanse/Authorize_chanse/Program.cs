@@ -1,6 +1,5 @@
-﻿using Authorize_chanse.ChatHub;
+﻿using Authorize_chanse.Hubs;
 using Authorize_chanse.DatabaseContext;
-using Authorize_chanse.Hubs;
 using Authorize_chanse.Interfaces;
 using Authorize_chanse.Services;
 using Authorize_chanse.UniversalMethods;
@@ -20,6 +19,8 @@ builder.Services.AddDbContext<Contextdatabase>(options =>
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddSingleton<JWTtokenGenerator>();
+
+builder.Services.AddSignalR();
 
 builder.Services.AddCors(options =>
 {

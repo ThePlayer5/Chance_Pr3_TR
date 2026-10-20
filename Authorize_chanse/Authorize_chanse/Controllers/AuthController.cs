@@ -13,9 +13,9 @@ public class AuthController
     public AuthController(IAuthService service) => _service = service; 
     
     [HttpPost("Register")]
-    public async Task<IActionResult> Register(QueryUsers register) => await _service.RegisterNewUser(register);
+    public async Task<IActionResult> Register([FromBody]QueryUsers register) => await _service.RegisterNewUser(register);
     
     [HttpPost("Authorize")]
-    public async Task<IActionResult> AuthUser(AuthUser authUser) => await _service.AuthUser(authUser);
+    public async Task<IActionResult> AuthUser([FromBody]AuthUser authUser) => await _service.AuthUser(authUser);
     
 }

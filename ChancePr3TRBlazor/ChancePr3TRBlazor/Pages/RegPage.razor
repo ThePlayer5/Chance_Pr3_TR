@@ -1,4 +1,9 @@
 ﻿@page "/reg"
+@using ChancePr3TRBlazor.ApiRequest
+@using ChancePr3TRBlazor.ApiRequest.Models
+@using ChancePr3TRBlazor.ApiRequest.Services
+@using Syncfusion.Blazor.Popups
+@inject NavigationManager Navigation
 
 <PageTitle>Регистрация</PageTitle>
 
@@ -7,7 +12,7 @@
         <div class="static-header reg-style-002">
            <NavLink href="/" class="" @onmouseenter="() => _isHover = true" @onmouseleave="() => _isHover = false">
                 <div class="reg-style-003">
-                    <img src="@(_isHover ? "chance-gif.gif" : "/chance.png")" class="reg-style-004" alt="Chance logo" />
+                    <img src="@(_isHover ? "chance-gif.gif" : "chance.png")" class="reg-style-004" alt="Chance logo" />
                     <span class="reg-style-006">Шанс</span>
                 </div>
             </NavLink>
@@ -48,23 +53,23 @@
             <div class="reg-style-019">
                 <div class="reg-style-020">
                     <label class="reg-style-021" for="reg-name">Имя</label>
-                    <input id="reg-name" type="text" class="reg-style-022" placeholder="Как к вам обращаться?" />
+                    <input id="reg-name" type="text" class="reg-style-022" placeholder="Как к вам обращаться?" @bind="@regUserData.fullname"/>
                 </div>
                 <div class="reg-style-020">
                     <label class="reg-style-021" for="reg-email">Email</label>
-                    <input id="reg-email" type="email" class="reg-style-022" placeholder="you@example.com" />
+                    <input id="reg-email" type="email" class="reg-style-022" placeholder="you@example.com" @bind="@regUserData.Email" />
                 </div>
                 <div class="reg-style-020">
                     <label class="reg-style-021" for="reg-university">Учебное заведение</label>
-                    <input id="reg-university" type="text" class="reg-style-022" placeholder="МГУ им. Ломоносова" />
+                    <input id="reg-university" type="text" class="reg-style-022" placeholder="МГУ им. Ломоносова" @bind="@regUserData.college" />
                 </div>
                 <div class="reg-style-020">
                     <label class="reg-style-021" for="reg-password">Пароль</label>
-                    <input id="reg-password" type="password" class="reg-style-022" placeholder="Минимум 8 символов" />
+                    <input id="reg-password" type="password" class="reg-style-022" placeholder="Минимум 8 символов" @bind="@regUserData.Password" />
                 </div>
                 <div class="reg-style-020">
                     <label class="reg-style-021" for="reg-password-confirm">Повторите пароль</label>
-                    <input id="reg-password-confirm" type="password" class="reg-style-022" placeholder="••••••••" />
+                    <input id="reg-password-confirm" type="password" class="reg-style-022" placeholder="••••••••" @bind="@confirmPassword" />
                 </div>
                 <label class="reg-style-023">
                     <input type="checkbox" class="reg-style-024" />
@@ -73,7 +78,7 @@
                         и <a href="" class="reg-style-026">политикой конфиденциальности</a>
                     </span>
                 </label>
-                <button type="button" class="reg-style-027">Создать аккаунт</button>
+                <button type="button" class="reg-style-027" @onclick="RegUser_Click">Создать аккаунт</button>
                 <div class="reg-style-028">
                     <span class="reg-style-029">Уже есть аккаунт?</span>
                     <NavLink href="/auth" class="reg-style-030">Войти</NavLink>
@@ -514,4 +519,44 @@
 
 @code {
     private bool _isHover;
+    private string? confirmPassword = "";
+    private RegUserData regUserData = new();
+    [Inject] private RequestApi _requestApi { get; set; }
+
+    private async Task RegUser_Click()
+    {
+        try
+        {
+            if (regUserData == null
+                || string.IsNullOrWhiteSpace(regUserData.Email)
+                || string.IsNullOrWhiteSpace(regUserData.Password)
+                || string.IsNullOrWhiteSpace(regUserData.fullname)
+                || string.IsNullOrWhiteSpace(regUserData.college))
+            {
+                Console.WriteLine($"Все поля должны быть заполнены!");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(confirmPassword)
+                || regUserData.Password != confirmPassword)
+            {
+                Console.WriteLine($"Пароли не совпадают!");
+                return;
+            }
+
+            var response = await _requestApi.RegisterAsync(regUserData);
+
+            Console.WriteLine($"Статус запроса: {response.status}");
+            if (response.status == false) return;
+
+            regUserData = new();
+
+            Navigation.NavigateTo("auth");
+            Console.WriteLine($"id: {regUserData.userId}, email: {regUserData.Email}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
 }

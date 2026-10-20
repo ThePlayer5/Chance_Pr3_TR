@@ -1,7 +1,11 @@
 ﻿@page "/profile"
+@using ChancePr3TRBlazor.ApiRequest
+@using ChancePr3TRBlazor.ApiRequest.Models
 @using ChancePr3TRBlazor.ApiRequest.Services
 @inject UserService UserService
+@inject ChatService ChatService
 @inject NavigationManager Navigation
+
 
 <PageTitle>Profile</PageTitle>
 
@@ -10,7 +14,7 @@
         <div class="static-header profile-style-002">
             <NavLink href="/" class="" @onmouseenter="() => _isHover = true" @onmouseleave="() => _isHover = false">
                 <div class="profile-style-003">
-                    <img src="@(_isHover ? "chance-gif.gif" : "/chance.png")" class="profile-style-004" alt="Chance logo"/>
+                    <img src="@(_isHover ? "chance-gif.gif" : "chance.png")" class="profile-style-004" alt="Chance logo"/>
                     <span class="profile-style-006">Шанс</span>
                 </div>
             </NavLink>
@@ -51,9 +55,9 @@
                     <div class="profile-style-018">
                         <div class="profile-style-019">А</div>
                         <div>
-                            <div class="profile-style-020">Алексей Морозов</div>
-                            <div class="profile-style-021">МГУ им. Ломоносова</div>
-                            <div class="profile-style-022">3 курс</div>
+                            <div class="profile-style-020"><p>@userDataShort.fullname</p></div>
+                            <div class="profile-style-021"><p>@userDataShort.college</p></div>
+                            <div class="profile-style-022"><p>@userDataShort.email</p></div>
                         </div>
                     </div>
                     <button type="button" class="profile-style-023">✏️ Редактировать профиль</button>
@@ -117,26 +121,6 @@
                 </div>
                 <div class="profile-style-017">
                     <h3 class="profile-style-024">Настройки</h3>
-                    <div class="profile-style-038">
-                        <div class="profile-style-039">
-                            <div>
-                                <div class="profile-style-040">Уведомления</div>
-                                <div class="profile-style-029">Напоминания отметить настроение</div>
-                            </div>
-                            <button aria-checked="true" role="switch" type="button" class="profile-style-041">
-                                <div class="profile-style-042"></div>
-                            </button>
-                        </div>
-                        <div class="profile-style-039">
-                            <div>
-                                <div class="profile-style-040">Режим анонимности</div>
-                                <div class="profile-style-029">Скрыть имя в чате</div>
-                            </div>
-                            <button aria-checked="false" role="switch" type="button" class="profile-style-043">
-                                <div class="profile-style-044"></div>
-                            </button>
-                        </div>
-                    </div>
                     <div class="profile-style-045">
                         <button type="button" class="profile-style-046">Выйти из аккаунта</button>
                     </div>
@@ -758,6 +742,8 @@
 
 @code {
     private bool _isHover;
+    private UserDataShort userDataShort = new();
+    [Inject] private RequestApi _requestApi { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -765,12 +751,38 @@
         {
             if (UserService.CurrentUser == null)
             {
-                Navigation.NavigateTo("/auth");
+                Navigation.NavigateTo("auth");
+                return;
             }
+
+            await GetProfileData();
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex);
+            Console.WriteLine(ex.Message);
+        }
+    }
+
+    private async Task GetProfileData()
+    {
+        try
+        {
+            if (UserService.CurrentUser == null) return;
+
+            string userToken = UserService.CurrentUser.token ?? "";
+
+            var response = await _requestApi.CheckProfileAsync(userToken);
+
+            Console.WriteLine($"Статус запроса: {response.status}");
+            if (response.status == false) return;
+
+            userDataShort = response.data;
+
+            Console.WriteLine($"id: {userDataShort.userId}, email: {userDataShort.email}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
         }
     }
 }

@@ -12,14 +12,15 @@ public class UserController
     public readonly IUserService _userService;
     public UserController(IUserService userService) => _userService = userService;
     
-    [HttpGet("CheckProfile/{authorization}")]
-    public async Task<IActionResult> CheckProfile([FromHeader] string authorization) => await _userService.CheckProfile(authorization);
+    [HttpGet("CheckProfile")]
+    public async Task<IActionResult> CheckProfile([FromHeader(Name = "Authorization")] string authorization) => await _userService.CheckProfile(authorization);
     
     [HttpGet("GetMood")]
     public async Task<IActionResult> GetMood() => await _userService.GetMood();
     
-    [HttpPost("CreateMood/{authorization}")]
-    public async Task<IActionResult> CreateMood([FromHeader] string authorization, [FromBody] MoodQuery addMoodQuery) => await _userService.CreateMood(authorization, addMoodQuery);
+    [HttpPost("CreateMood")]
+    public async Task<IActionResult> CreateMood([FromHeader(Name = "Authorization")] string authorization, [FromBody] MoodQuery addMoodQuery)
+        => await _userService.CreateMood(authorization, addMoodQuery);
     
     [HttpGet("GetDoctors")]
     public async Task<IActionResult> GetDoctors() => await _userService.GetDoctors();
